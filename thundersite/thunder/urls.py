@@ -3,7 +3,7 @@ from django.urls import path
 from . import views
 
 
-app_name = 'Thunder'
+app_name = 'thunder'
 urlpatterns = [
                   path('home/', views.home, name='home'),
 
