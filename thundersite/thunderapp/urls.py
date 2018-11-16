@@ -1,9 +1,9 @@
 from django.urls import path
 
-from . import views
+from thunderapp import views
 
 
-app_name = 'thunder'
+app_name = 'thunderapp'
 urlpatterns = [
                   path('home/', views.home, name='home'),
 
