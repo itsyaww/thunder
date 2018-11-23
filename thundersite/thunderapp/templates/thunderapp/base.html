@@ -53,22 +53,9 @@ Integer ornare mi ac nulla volutpat, iaculis bibendum felis scelerisque. Maecena
 
 Etiam vitae nibh pharetra, varius metus ut, lacinia libero. Nulla ut vehicula massa, ut pharetra eros. Phasellus faucibus ligula a ante condimentum, vitae pellentesque nisi gravida. Morbi suscipit purus eget mollis pellentesque. Suspendisse non lectus eu orci laoreet tempus a in orci. Nam vitae leo at dui bibendum feugiat. Proin dictum dictum nisl, sed mattis sem porta sed. Donec in lectus in nulla congue ornare. Quisque ac dignissim nulla. Nunc egestas volutpat nulla, at faucibus tellus tincidunt mollis. Morbi porttitor neque quis ipsum ornare posuere. Morbi ultrices volutpat viverra.
 
-{% if loggedin %}
-<div class='appname'>{{ appname }} ({{ username }}) </div>
-{% else %}
-<div class='appname'>{{ appname }}</div>
-{% endif %}
-<br>
 
-<br>
-{% block signup %}
-{% include "thunderapp/signup.html" %}
+{% block content  %}
 {% endblock %}
-
-{% block login %}
-{% include "thunderapp/login.html" %}
-{% endblock %}
-<br>
 
 
 <!-- Optional JavaScript -->

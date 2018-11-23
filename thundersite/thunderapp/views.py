@@ -20,6 +20,13 @@ def signup(request):
     context = { 'appname': appname }
     return render(request,'thunderapp/signup.html',context)
 
+def profile(request):
+    context = { 'appname': appname }
+    return render(request,'thunderapp/profile.html',context)
+
+def matchList(request):
+    context = { 'appname': appname }
+    return render(request,'thunderapp/matchList.html',context)
 
 # def login(request):
 #     if not ('username' in request.POST and 'password' in request.POST):
