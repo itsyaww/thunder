@@ -1,4 +1,4 @@
-
+{% extends "thunderapp/base.html" %}
 {% block content %}
 <span class='info'>&#8658; You must be logged in to view this page.</span>
 <br>
@@ -9,9 +9,21 @@
 	</span>
 <br>
 
-<a href="/signup">Signup</a>
+    {% if loggedin %}
+<div class='appname'>{{ appname }} ({{ username }}) </div>
+{% else %}
+<div class='appname'>{{ appname }}</div>
+{% endif %}
 <br>
-<a href="/login">Login</a>
+<br>
+{#    TODO#}
+{#    If  user is logged in we want to show the profile here  else show login page#}
+
+<br>
+{% include "thunderapp/login.html" %}
+
+<br>
+
 
 <br>
 {% endblock %}
