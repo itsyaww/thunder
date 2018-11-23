@@ -2,24 +2,29 @@
 {% load staticfiles %}
 
 {% block login %}
-   <div class='main'>
+<div class="input-group">
        {% if loggedin %}
-           You are now logged in.
-           Please <a href="{% url 'messages'%}">click here</a> to continue.
-           <br><br>
+            @<h1 class="h3 mb-3 font-weight-normal">
+                You are now logged in.
+                Please <a href="{% url 'home'%}">click here</a> to continue.
+            </h1>
+            <br><br>
        {% else %}
-           <h3>Please enter your details to login</h3>
-           <form method='POST'>
-           	{% csrf_token %}
-               <span class='fieldname'>Username</span>
-               <input type='text' maxlength='16' id='logusername' name='username'>
-               <span id='info'></span>
-               <br>
-               <span class='fieldname'>Password</span>
-               <input type='password' maxlength='16' name='password'><br>
-               <span class='fieldname'>&nbsp;</span>
-               <input type='submit' value='Login'>
+           <form class="form-signin" pb-autologin="true" autocomplete="off" method='POST'>
+               {% csrf_token %}
+               <img class="mb-4" src="{%  static 'thunderlogo.jpg' %}" alt="" width="300" height="300">
+               <h1 class="h3 mb-3 font-weight-normal">Please enter your details to login</h1>
+               <label for="inputUserName" class="sr-only">UserName</label>
+               <input type="email" id="inputUserName" name='username' maxlength="50" class="form-control" placeholder="UserName" required="" autofocus="" pb-role="username">
+               <label for="inputPassword" class="sr-only">Password</label>
+               <input type="password" id="inputPassword" class="form-control"  name='password' placeholder="Password" required="" pb-role="password">
+               <div class="checkbox mb-3">
+                   <label>
+                       <input type="checkbox" value="remember-me"> Remember me
+                   </label>
+               </div>
+               <button class="btn btn-lg btn-primary btn-block" type="submit" pb-role="submit">Log in</button>
            </form>
        {% endif %}
-   </div>
+</div>
 {% endblock %}
