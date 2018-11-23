@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Member
+from .models import Member, Hobby, Message
 
 
 # Register your models here.
@@ -10,3 +10,7 @@ class Admin(admin.ModelAdmin):
 
 
 admin.site.register(Member, Admin)
+admin.site.register(Hobby)
+admin.site.register(Message)
+#username: admin
+#password: admin
