@@ -3,16 +3,29 @@
 {% block signup %}
    <div class='main'>
       <h3>Please enter your details to sign up</h3>
-      <form method='POST'>
+      <form method='POST' id="signupuser">
       	{% csrf_token %}
          <span class='fieldname'>Username</span>
-         <input type='text' maxlength='16' id='regusername' name='username'>
+         <input type='text' maxlength='16' id='regusername'>
             <span id='info'></span>
             <br>
-            <span class='fieldname'>Password</span>
-            <input type='password' maxlength='16' name='password'><br>
-            <span class='fieldname'>&nbsp;</span>
-         <input type='submit' value='Sign up'>
+            <span class='fieldname' >Password</span>
+            <input type='password' maxlength='16' id='regpassword' ><br>
+         <span class='fieldname' >Set Gender</span>
+
+         <select name="Gender" id="reggender">
+               <option value="Male">Male</option>
+               <option value="Female">Female</option>
+               <option value="Other">Other</option>
+         </select>
+         <br><br>
+         <span class='fieldname' >Date Of Birth</span>
+         <input type="date" id="regbday">
+         <br><br>
+         <span class='fieldname' >Email</span>
+         <input type="text" id="regEmail">
+         <br><br>
+         <input type='submit' value="SUBMIT" id='reguser'>
       </form>
    </div>
 {% endblock %}
