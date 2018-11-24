@@ -52,8 +52,8 @@ class Member(models.Model):
     firstName = models.CharField(max_length=30) #all choices null=False by default - user MUST input data
     lastName = models.CharField(max_length=30)
     dateOfBirth = models.DateField(max_length=8, default='YYYY-MM-DD')
-    gender = models.CharField(max_length=20, choices=GENDER)
-    profileImage = models.ImageField(upload_to='profile_images', default=None)
+    gender = models.CharField(max_length=7, null=True)
+    profileImage = models.ImageField(upload_to='media/profile_images', default=None)
 
     #Fields with many to many relations
     hobbies = models.ManyToManyField(Hobby)
