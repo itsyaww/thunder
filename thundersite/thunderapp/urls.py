@@ -12,7 +12,10 @@ urlpatterns = [
     #Signup Page
     path('signup/', views.signup, name='signup'),
     #Profile
-    path('profile/', views.profile, name='profile'),
+    path('profile/<int:member_id>', views.profile, name='profile'),
     #Display list of people with common hobbies
     path('matchList/', views.matchList, name='matchList'),
+    path('register/', views.register, name='register'),
+    path('profile/<int:member_id>/uploadimage/', views.upload_image, name='register'),
+
 ]

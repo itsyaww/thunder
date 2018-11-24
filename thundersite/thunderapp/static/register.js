@@ -1,13 +1,10 @@
 
-$(document).on('submit', '#signupuser' , function(e){
+$(function(){
+
+    $(document).on('submit', '#signupuser' , function(e){
     e.preventDefault();
-
-
-    $.ajax({
-        type: "POST",
-        url:'/users/register/',
-        data:  {
-            'username' : $('#regusername').val(),
+    var context ={
+        'username' : $('#regusername').val(),
             'password':$('#regpassword').val(),
             'gender':$('#reggender').val(),
             'DofB':$('#regbday').val(),
@@ -15,14 +12,19 @@ $(document).on('submit', '#signupuser' , function(e){
 
             csrfmiddlewaretoken:$("input[name=csrfmiddlewaretoken]").val()
 
-        },
+    };
+
+    $.ajax({
+        type: "POST",
+        url:'/register/',
+        data: context ,
         success: searchSuccess,
-        dataType:'html'
-    })
+    });
 
-
+    });
 });
 
 function searchSuccess(data,textStatus,jqXHR) {
     alert("Added user")
 }
+
