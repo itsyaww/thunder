@@ -1,13 +1,8 @@
+{% extends "thunderapp/base.html" %}
 {% load staticfiles %}
 
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
 
+{% block content %}
 
 {% if member.profileImage %}
     <img id='profile-img' height=150 src='{{ member.profileImage.url }}'>
@@ -20,12 +15,4 @@
 
     Select Profile Picture: <input type="file" name="myFile" id='regprofileimage{{member.id}}'>
     <button id="save{{member.id}}" onclick="uploadProfilePicture('{{member.id}}')">Save</button>
-
-</body>
-
-<script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
-<script type="text/javascript" src="{% static 'file_upload.js' %}"></script>
-
-
-</html>
-
+{% endblock %}

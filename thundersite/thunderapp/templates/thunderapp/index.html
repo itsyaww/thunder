@@ -1,28 +1,16 @@
 {% extends "thunderapp/base.html" %}
 {% block content %}
-<span class='info'>&#8658; You must be logged in to view this page.</span>
-<br>
-<br>
-<br>
-<span class='main'>
-		Welcome to {{ appname }}, please sign up and/or log in to join in.
-	</span>
-<br>
+    <div class="jumbotron" style="margin-bottom: 0px;">
+        <h1>Thunder</h1>
+        <p>Matching you to the right one..<3</p>
+    </div>
 
     {% if loggedin %}
-<div class='appname'>{{ appname }} ({{ username }}) </div>
-{% else %}
-<div class='appname'>{{ appname }}</div>
-{% endif %}
-<br>
-<br>
-{#    TODO#}
-{#    If  user is logged in we want to show the profile here  else show login page#}
-
-<br>
-{% include "thunderapp/login.html" %}
-
-<br>
+    <!--todo this should be the profile-->
+        {% include "thunderapp/login.html" %}
+    {% else %}
+        {% include "thunderapp/login.html" %}
+    {% endif %}
 
 
 <br>

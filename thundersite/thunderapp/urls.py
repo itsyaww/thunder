@@ -14,8 +14,9 @@ urlpatterns = [
     #Profile
     path('profile/<int:member_id>', views.profile, name='profile'),
     #Display list of people with common hobbies
-    path('matchList/', views.matchList, name='matchList'),
+    path('matchlist/', views.matchlist, name='matchlist'),
     path('register/', views.register, name='register'),
+    path('messages/', views.messages, name='messages'),
     path('profile/<int:member_id>/uploadimage/', views.upload_image, name='register'),
 
 ]

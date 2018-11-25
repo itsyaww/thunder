@@ -6,6 +6,18 @@ from django.db import IntegrityError
 
 appname = "Thunder"
 
+# decorator that tests whether user is logged in
+def loggedin(view):
+    def mod_view(request):
+        if 'username' in request.session:
+            username = request.session['username']
+            try: user = Member.objects.get(username=username)
+            except Member.DoesNotExist: raise Http404('Member does not exist')
+            return view(request, user)
+        else:
+            return render(request,'thunderapp/index.html',{})
+    return mod_view
+
 @csrf_exempt
 def home(request):
     return render(request, 'thunderapp/base.html', {})
@@ -26,9 +38,13 @@ def profile(request,member_id):
     context = {'member': member}
     return render(request, 'thunderapp/profile.html', context)
 
-def matchList(request):
+def matchlist(request):
     context = { 'appname': appname }
-    return render(request,'thunderapp/matchList.html',context)
+    return render(request,'thunderapp/matchlist.html',context)
+
+def messages(request):
+    context = { 'appname': appname }
+    return render(request,'thunderapp/messages.html',context)
 
 @csrf_exempt
 def register(request):
