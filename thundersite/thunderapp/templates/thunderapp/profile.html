@@ -9,8 +9,13 @@
 <body>
 
 
-{% if member %}
+{% if member.profileImage %}
+    <img id='profile-img' height=150 src='{{ member.profileImage.url }}'>
+{% else %}
 
+<img id='profile-img' height=150 src="{% static '/profile-image.jpg' %}">
+{% endif %}
+<br>
     {% csrf_token %}
 
     Select Profile Picture: <input type="file" name="myFile" id='regprofileimage{{member.id}}'>
@@ -21,7 +26,6 @@
 <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
 <script type="text/javascript" src="{% static 'file_upload.js' %}"></script>
 
-{% endif %}
 
 </html>
 
