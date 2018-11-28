@@ -1,4 +1,5 @@
 from django.db import models
+from django.contrib.auth.models import User
 
 
 class Hobby(models.Model):
@@ -33,7 +34,7 @@ class Hobby(models.Model):
         return 'Hobby: ' + self.hobby
 
 
-class Member(models.Model):
+class Member(User):
 
     MALE = 'MALE'
     FEMALE = 'FEMALE'
@@ -44,9 +45,9 @@ class Member(models.Model):
               (OTHER,'OTHER'))
 
     #User Defining Attributes
-    username = models.CharField(max_length=15, unique=True,)
-    password = models.CharField(max_length=30)
-    email = models.EmailField(max_length=254, default='unknown@unknown.com')
+    # username = models.CharField(max_length=15, unique=True,)
+    # password = models.CharField(max_length=30)
+    # email = models.EmailField(max_length=254, default='unknown@unknown.com')
 
     #General Attributes
     firstName = models.CharField(max_length=30) #all choices null=False by default - user MUST input data

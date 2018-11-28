@@ -8,7 +8,7 @@ urlpatterns = [
     #Default page
     path('', views.index, name='index'),
     #Login page
-    path('login/', views.index, name='login'),
+    path('login/', views.login, name='login'),
     #Signup Page
     path('signup/', views.signup, name='signup'),
     #Register
