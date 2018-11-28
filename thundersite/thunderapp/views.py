@@ -4,6 +4,9 @@ from django.http import HttpResponse, Http404
 from django.utils import timezone
 from thunderapp.models import Member, Message
 from django.db import IntegrityError
+import datetime as D
+from django.contrib.auth.models import User
+
 
 from thunderapp.templatetags.extras import display_message
 
@@ -96,6 +99,8 @@ def friends(request,user):
 
 
 # view function that responses to Ajax requests on login/register pages
+
+@csrf_exempt
 def checkuser(request):
     if 'username' in request.POST:
         try:
@@ -124,6 +129,7 @@ def post_message(request, user):
     else:
         raise Http404('POST not used, or recip missing in POST request')
 
+
 @loggedin
 def erase_message(request, user):
     if 'id' in request.POST:
@@ -138,3 +144,40 @@ def erase_message(request, user):
             raise Http404('User does not have permission to delete message')
     else:
         raise Http404('Missing id in POST')
+
+
+@csrf_exempt
+def login(request):
+    if not ('loginusername' in request.POST and 'loginpassword' in request.POST):
+        context = { 'appname': appname }
+        return render(request,'thunderapp/login.html',context)
+    else:
+        username = request.POST['loginusername']
+        password = request.POST['loginpassword']
+        correctpassword = None
+        try:
+            member = Member.objects.get(username=username)
+            correctpassword = member.password
+        except Member.DoesNotExist:
+            Http404('Username/password is incorrect')
+
+        if password == correctpassword:
+            # remember user in session variable
+            request.session['username'] = username
+            request.session['password'] = password
+            context = {
+                'appname': appname,
+                'username': username,
+                'loggedin': True
+            }
+            response = render(request, 'thunderapp/base.html', context)
+            # remember last login in cookie
+            now = D.datetime.utcnow()
+            max_age = 365 * 24 * 60 * 60  #one year
+            delta = now + D.timedelta(seconds=max_age)
+            format = "%a, %d-%b-%Y %H:%M:%S GMT"
+            expires = D.datetime.strftime(delta, format)
+            response.set_cookie('last_login',now,expires=expires)
+            return response
+        else:
+            raise Http404('Username/password is incorrect')
