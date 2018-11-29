@@ -18,7 +18,7 @@ urlpatterns = [
     #Profile
     path('profile/<int:member_id>', views.profile, name='profile'),
     #Display list of people with common hobbies
-    path('matchlist/', views.matchlist, name='matchlist'),
+    path('matchlist/<int:member_id>', views.matchlist, name='matchlist'),
     # messages page
     path('messages/', views.messages, name='messages'),
     # Ajax: check if user exists
