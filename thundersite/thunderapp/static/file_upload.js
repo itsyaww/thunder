@@ -10,11 +10,10 @@ function uploadProfilePicture(mID) {
         url: '/profile/'+mID+'/uploadimage/',
         data:formdata,
         success: function (data) {
-            alert('image uploaded')
+            $('#profilePicture').load(location.href + " #profilePicture")
         },
         processData: false,
         contentType: false
     });
 }
-
 
