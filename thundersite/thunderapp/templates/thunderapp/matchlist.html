@@ -1,7 +1,7 @@
 {% extends "thunderapp/base.html" %}
 {% block content %}
-    Guess who has a match!
+    Guess who has a match! :)
     {% for match in currentMember %}
-        <h6 href="https://www.w3schools.com">{{ match.firstName }}</h6>
+        <h6> <a href="https://www.w3schools.com">{{ match.firstName }}</a></h6>
     {% endfor %}
 {% endblock %}
