@@ -3,9 +3,14 @@
 
 
 {% block content %}
-
+<div class="container-fluid" style="background:rgb(255,255,255) !important;">
+    <section class="container">
+        <div class="container-page">
+            <div class='main-login main-centre'>
 <div id="profilePicture">
-{% if member.profileImage %}
+    <br>
+
+    {% if member.profileImage %}
     <img id='profile-img' class="rounded mx-auto d-block" height=150 src='{{ member.profileImage.url }}'>
 
     {% else %}
@@ -51,5 +56,8 @@
 
 
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
-
+            </div>
+        </div>
+    </section>
+</div>
 {% endblock %}

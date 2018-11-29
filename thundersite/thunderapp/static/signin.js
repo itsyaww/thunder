@@ -20,7 +20,9 @@ $(function(){
     });
 });
 
-function searchSuccess(data,textStatus,jqXHR) {
-    alert("User login success")
+function searchSuccess(response) {
+    if (response.redirect !== undefined && response.redirect) {
+        window.location.href = response.redirect_url;
+    }
 }
 
