@@ -4,9 +4,7 @@ from django.http import HttpResponse, Http404, JsonResponse
 from django.utils import timezone
 from thunderapp.models import Member, Message
 from django.db import IntegrityError
-import datetime as D
-from django.contrib.auth.models import User
-
+from django.db.models import Q
 
 from thunderapp.templatetags.extras import display_message
 
@@ -44,9 +42,29 @@ def profile(request,member_id):
     context = {'member': member}
     return render(request, 'thunderapp/profile.html', context)
 
-def matchlist(request):
-    context = { 'appname': appname }
-    return render(request,'thunderapp/matchlist.html',context)
+def matchlist(request, member_id):
+    currentMember = get_object_or_404(Member, pk=member_id)
+    matches = []
+    followers = Member.objects.filter(following__pk=member_id)
+
+    for member in currentMember.following.all():
+        if member in followers:
+            matches.append(member)
+
+    matchRank = []
+
+    for match in matches:
+        count = 0
+        for hobby in currentMember.hobbies.all():
+            if hobby in match.hobbies.all():
+                count += 1
+        matchRank.append(count)
+
+    insertionSort(matches, matchRank)
+
+    context = {'currentMember': matches}
+    return render(request,'thunderapp/matchlist.html', context)
+
 
 def messages(request):
     context = { 'appname': appname }
@@ -186,3 +204,22 @@ def login(request):
             return response
         else:
             raise Http404('Username/password is incorrect')
+
+
+def insertionSort(matchList, matchRank):
+    for i in range(len(matchList)):
+        insert(matchRank[i], matchRank, i, matchList, matchList[i])
+
+def insert(k, matchRank, hi, matchList, member):
+    for i in range(hi, 0, -1):
+        if k < matchRank[i - 1]:
+            matchRank[i] = k
+            matchList[i] = member
+            return
+        else:
+            matchRank[i] = matchRank[i - 1]
+            matchList[i] = matchList[i - 1]
+    matchRank[0] = k
+    matchList[0] = member
+
+
