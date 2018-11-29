@@ -1,6 +1,6 @@
 from django.views.decorators.csrf import csrf_exempt
 from django.shortcuts import render,get_object_or_404
-from django.http import HttpResponse, Http404
+from django.http import HttpResponse, Http404, JsonResponse
 from django.utils import timezone
 from thunderapp.models import Member, Message
 from django.db import IntegrityError
@@ -158,8 +158,10 @@ def login(request):
         username = request.POST['loginusername']
         password = request.POST['loginpassword']
         correctpassword = None
+        mid = None
         try:
             member = Member.objects.get(username=username)
+            mid = member.id
             correctpassword = member.password
         except Member.DoesNotExist:
             Http404('Username/password is incorrect')
@@ -173,7 +175,7 @@ def login(request):
                 'username': username,
                 'loggedin': True
             }
-            response = render(request, 'thunderapp/base.html', context)
+            response = JsonResponse({"redirect":True,"redirect_url":"http://127.0.0.1:8000/profile/"+str(mid)})
             # remember last login in cookie
             now = D.datetime.utcnow()
             max_age = 365 * 24 * 60 * 60  #one year

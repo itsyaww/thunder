@@ -1,17 +1,12 @@
-{% extends "thunderapp/base.html" %}
 {% block content %}
-    <div class="jumbotron" style="margin-bottom: 0px;">
-        <h1>Thunder</h1>
-        <p>Matching you to the right one..<3</p>
+
     </div>
 
-    {% if loggedin %}
-    <!--todo this should be the profile-->
         {% include "thunderapp/login.html" %}
-    {% else %}
-        {% include "thunderapp/login.html" %}
-    {% endif %}
-
+<div class="jumbotron" style="margin-bottom: 0px;">
+    <h1>Thunder</h1>
+    <p>Matching you to the right one..<3</p>
 
 <br>
+</div>
 {% endblock %}
