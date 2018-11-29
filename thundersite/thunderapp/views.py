@@ -4,9 +4,7 @@ from django.http import HttpResponse, Http404, JsonResponse
 from django.utils import timezone
 from thunderapp.models import Member, Message
 from django.db import IntegrityError
-import datetime as D
-from django.contrib.auth.models import User
-
+from django.db.models import Q
 
 from thunderapp.templatetags.extras import display_message
 
