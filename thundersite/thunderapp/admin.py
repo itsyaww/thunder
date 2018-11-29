@@ -4,7 +4,7 @@ from .models import Member, Hobby, Message
 
 # Register your models here.
 class Admin(admin.ModelAdmin):
-    list_display = ['id','username', 'password','gender','dateOfBirth','email','profileImage']
+    list_display = ['id','firstName','lastName','username', 'password','gender','dateOfBirth','email','profileImage']
     list_editable = ['password','gender','dateOfBirth','email','profileImage']
     list_display_links = ['username']
 

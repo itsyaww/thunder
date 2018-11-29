@@ -4,7 +4,9 @@ $(function(){
     $(document).on('submit', '#signupuser' , function(e){
     e.preventDefault();
     var context ={
-        'username' : $('#regusername').val(),
+            'firstname': $('#regfirstname').val(),
+            'lastname': $('#reglastname').val(),
+            'username' : $('#regusername').val(),
             'password':$('#regpassword').val(),
             'gender':$('#reggender').val(),
             'DofB':$('#regbday').val(),
