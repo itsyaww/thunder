@@ -2,36 +2,60 @@
 {% load staticfiles %}
 
 {% block content %}
-   <div class='main'>
-      <h3>Please enter your details to sign up</h3>
-      <form method='POST' id="signupuser">
-      	{% csrf_token %}
-         <span class='fieldname'>Username</span>
-         <input type='text' maxlength='16' id='regusername'>
-            <span id='info'></span>
-            <br>
-            <span class='fieldname' >Password</span>
-            <input type='password' maxlength='16' id='regpassword' ><br>
-         <span class='fieldname' >Set Gender</span>
+<div class="container-fluid">
+    <section class="container">
+        <div class="container-page">
+            <div class='main-login main-centre'>
+                <h3>Please enter your details to sign up</h3>
+                <form method='POST' id="signupuser">
+                    {% csrf_token %}
+                    <div class="form-row">
+                        <div class="form-group col-md-6">
+                            <label for="regfirstname">First Name</label>
+                            <input type="text" class="form-control" placeholder="First name" id="regfirstname">
+                        </div>
+                        <div class="form-group col-md-6">
+                            <label for="reglastname">Last Name</label>
+                            <input type="text" class="form-control" placeholder="Last name" id="reglastname">
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group col-md-6">
+                            <label for="regusername">Username</label>
+                            <input type="text" class="form-control" maxlength="16" placeholder="Username" id="regusername">
+                        </div>
+                        <div class="form-group col-md-6">
+                            <label for="regpassword">Password</label>
+                            <input type="password" class="form-control" maxlength="16" placeholder="Password" id="regpassword">
+                        </div>
+                    </div>
 
-         <select name="Gender" id="reggender">
-               <option value="Male">Male</option>
-               <option value="Female">Female</option>
-               <option value="Other">Other</option>
-         </select>
-         <br><br>
-         <span class='fieldname' >Date Of Birth</span>
-         <input type="date" id="regbday">
-         <br><br>
-         <span class='fieldname' >Email</span>
-         <input type="text" id="regEmail">
-         <br><br>
+                    <div class="form-row">
+                        <div class="form-group col-md-6">
+                            <label for="reggender">Gender</label>
+                            <select name="Gender" id="reggender"class="form-control">
+                                <option value="Male">Male</option>
+                                <option value="Female">Female</option>
+                                <option value="Other">Other</option>
+                            </select>
+                        </div>
+                        <div class="form-group col-md-6">
+                            <label for="regbday">Date Of Birth</label>
+                            <input type="date" class="form-control" id="regbday">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="regEmail">Email</label>
+                        <input type="text" class="form-control" id="regEmail" placeholder="Email">
+                    </div>
+                    <input type='submit' value="SUBMIT" id='reguser' class="btn btn-primary">
+                </form>
+                <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
 
-         <input type='submit' value="SUBMIT" id='reguser'>
-      </form>
-       <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+                <script type="text/javascript" src="{% static 'register.js' %}"></script>
 
-       <script type="text/javascript" src="{% static 'register.js' %}"></script>
-
-   </div>
+            </div>
+        </div>
+    </section>
+</div>
 {% endblock %}
