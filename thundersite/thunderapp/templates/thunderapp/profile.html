@@ -7,18 +7,19 @@
     <section class="container">
         <div class="container-page">
             <div class='main-login main-centre'>
-<div id="profilePicture">
-    <br>
+                <br>
+
+                <label id="profilePicture" for="regprofileimage{{member.id}}" data-toggle="tooltip" title="Upload Profile Image">
 
     {% if member.profileImage %}
-    <img id='profile-img' class="rounded mx-auto d-block" height=150 src='{{ member.profileImage.url }}'>
+    <img id='profile-img' class="rounded-circle" height=150 src='{{ member.profileImage.url }}'>
 
     {% else %}
 
-<img id='profile-img' class="rounded mx-auto d-block" height=150 src="{% static '/profile-image.jpg' %}">
+<img id='profile-img' class="rounded-circle" height=150 src="{% static '/profile-image.jpg' %}">
 
     {% endif %}
-</div>
+</label>
 <div>
     <br>
 
@@ -46,7 +47,7 @@
 <br>
     {% csrf_token %}
 
-    Update Profile Picture: <input type="file" name="myFile" id='regprofileimage{{member.id}}'>
+    <input type="file" name="myFile" id='regprofileimage{{member.id}}' style="display:none" >
 <br><br>
 
 
