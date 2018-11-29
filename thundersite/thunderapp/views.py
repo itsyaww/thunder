@@ -60,11 +60,14 @@ def register(request):
         g = request.POST.get('gender')
         d = request.POST.get('DofB')
         e = request.POST.get('email')
+        fn = request.POST.get('firstname')
+        ln = request.POST.get('lastname')
+
         try:
-            Member.objects.create(username=u,password=p,gender=g,dateOfBirth=d,email=e)
+            Member.objects.create(username=u,password=p,gender=g,dateOfBirth=d,email=e,firstName=fn,lastName=ln)
 
         except IntegrityError:
-            raise Http404('Username '+u+' already taken: Usernames must be unique')
+            raise Http404('Invalid value in field')
 
         return HttpResponse()
     else:
