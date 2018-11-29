@@ -4,7 +4,12 @@ from django.http import HttpResponse, Http404, JsonResponse
 from django.utils import timezone
 from thunderapp.models import Member, Message
 from django.db import IntegrityError
+import datetime as D
+from django.http import QueryDict
 from django.db.models import Q
+
+from django.contrib.auth.models import User
+
 
 from thunderapp.templatetags.extras import display_message
 
@@ -87,7 +92,9 @@ def register(request):
         except IntegrityError:
             raise Http404('Invalid value in field')
 
-        return HttpResponse()
+        member = Member.objects.get(username=u)
+        mid = member.id
+        return JsonResponse({"redirect":True,"redirect_url":"http://127.0.0.1:8000/profile/"+str(mid)})
     else:
         raise Http404('POST data missing')
 
@@ -221,5 +228,35 @@ def insert(k, matchRank, hi, matchList, member):
             matchList[i] = matchList[i - 1]
     matchRank[0] = k
     matchList[0] = member
+
+
+
+
+@csrf_exempt
+def update_profile_details(request,member_id):
+
+    m = get_object_or_404(Member,id=member_id)
+
+    if request.method == "PUT":
+        put = QueryDict(request.body)
+        fname = put.get('updatefirstname')
+        lname = put.get('updatelastname')
+        gender = put.get('updategender')
+        email = put.get('updateemail')
+
+        user = User.objects.get(id=member_id)
+
+        m.firstName = fname
+        m.lastName = lname
+        m.gender = gender
+        m.email = email
+
+        m.save()
+
+
+    member = Member.objects.all()
+
+    return HttpResponse()
+
 
 
