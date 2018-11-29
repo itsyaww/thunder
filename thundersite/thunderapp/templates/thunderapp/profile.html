@@ -4,12 +4,32 @@
 
 {% block content %}
 
+<div id="profilePicture">
 {% if member.profileImage %}
     <img id='profile-img' height=150 src='{{ member.profileImage.url }}'>
 {% else %}
 
 <img id='profile-img' height=150 src="{% static '/profile-image.jpg' %}">
 {% endif %}
+</div>
+<div>
+<span>Username: {{member.username}}</span>
+<br>
+
+<span>First Name: {{member.firstName}}</span>
+<br>
+
+<span>Last Name: {{member.lastName}}</span>
+    <br>
+    <span>Gender: {{member.gender}}</span>
+    <br>
+
+<span>Date Of Birth: {{member.dateOfBirth}}</span>
+    <br>
+
+
+</div>
+
 <br>
     {% csrf_token %}
 
