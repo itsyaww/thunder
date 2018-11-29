@@ -3,42 +3,67 @@
 
 
 {% block content %}
+
+<style>
+    .bordercontainer {
+        position: relative;
+        text-align: center;
+        color: white;
+    }
+
+    .left {
+        position: absolute;
+        top: 20px;
+        left: 30px;
+
+    }
+
+    .bottom-right {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        font-size: 50px;
+
+    }
+</style>
 <div class="container-fluid" style="background:rgb(255,255,255) !important;">
     <section class="container">
         <div class="container-page">
             <div class='main-login main-centre'>
                 <br>
+                <div class="bordercontainer">
+                    <img id='img' class="img-fluid" alt="Responsive image"  height=100 width="1500" src="{% static '/border.png' %}">
+                    <div class="bottom-right">{{member.username}}</div>
+                    <label id="profilePicture" for="regprofileimage{{member.id}}"  data-toggle="tooltip" title="Upload Profile Image">
 
-                <label id="profilePicture" for="regprofileimage{{member.id}}" data-toggle="tooltip" title="Upload Profile Image">
+                        {% if member.profileImage %}
+                        <img id='profile-img' class="rounded-circle left " height=150 src='{{ member.profileImage.url }}'>
 
-    {% if member.profileImage %}
-    <img id='profile-img' class="rounded-circle" height=150 src='{{ member.profileImage.url }}'>
+                        {% else %}
 
-    {% else %}
+                        <img id='profile-img' class="rounded-circle left" height=150 src="{% static '/profile-image.jpg' %}">
 
-<img id='profile-img' class="rounded-circle" height=150 src="{% static '/profile-image.jpg' %}">
+                        {% endif %}
+                    </label>
+                </div>
 
-    {% endif %}
-</label>
 <div>
     <br>
 
-    <span >Username: <input type="text" class="form-control" name="profileusername" value="{{member.username}}"></span>
+<span>First Name: <input type="text" class="form-control" id="profilefirstname" value="{{member.firstName}}"> </span>
 <br>
 
-<span>First Name: <input type="text" class="form-control" name="profilefirstname" value="{{member.firstName}}"> </span>
-<br>
-
-<span>Last Name: <input type="text" class="form-control" name="profilelastname" value="{{member.lastName}}"></span>
+<span>Last Name: <input type="text" class="form-control" id="profilelastname" value="{{member.lastName}}"></span>
     <br>
-    <span>Gender: <input type="text" class="form-control" name="profilegender" value="{{member.gender}}"></span>
+    <span>Gender: <input type="text" readonly class="form-control" id="profilegender" value="{{member.gender}}"></span>
     <br>
 
 
-<span>Date Of Birth:</span> <div>{{member.dateOfBirth}}</div>
+<span>Date Of Birth: <input type="text" readonly class="form-control" id="profileDOB" value="{{member.dateOfBirth}}"></span>
     <br>
 
-    <span>Email: <input type="text" class="form-control" name="profileemail" value="{{member.email}}"></span>
+    <span>Email: <input type="text"  class="form-control" id="profileemail" value="{{member.email}}"></span>
     <br>
 
 
@@ -47,11 +72,11 @@
 <br>
     {% csrf_token %}
 
-    <input type="file" name="myFile" id='regprofileimage{{member.id}}' style="display:none" >
-<br><br>
+    <input type="file" name="myFile" id='regprofileimage{{member.id}}' onchange="uploadProfilePicture('{{member.id}}')" style="display:none" >
 
 
-<button id="save{{member.id}}" class="btn btn-lg btn-primary btn-block" onclick="uploadProfilePicture('{{member.id}}')">Save Profile</button>
+
+<button id="save{{member.id}}" class="btn btn-lg btn-primary btn-block" onclick="updateProfile('{{member.id}}')">Save Profile</button>
 
 <br>
 

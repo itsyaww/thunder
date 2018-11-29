@@ -15,6 +15,7 @@ urlpatterns = [
     path('register/', views.register, name='register'),
     #Upload Image
     path('profile/<int:member_id>/uploadimage/', views.upload_image, name='register'),
+    path('profile/<int:member_id>/updateprofile/', views.update_profile_details, name='updateprofile'),
     #Profile
     path('profile/<int:member_id>', views.profile, name='profile'),
     #Display list of people with common hobbies
