@@ -20,13 +20,24 @@ $(function(){
         type: "POST",
         url:'/register/',
         data: context ,
-        success: searchSuccess,
+        success: searchSuccess
     });
 
     });
 });
 
-function searchSuccess(data,textStatus,jqXHR) {
-    alert("Added user")
-}
+function searchSuccess(response) {
+    if (response.success) {
+        $("#successRegisterAlert").show();
+        $("#successRegisterAlert").delay(500).addClass("in").fadeOut(2000);
+    }
+    else {
+        $("#errorRegisterAlert").show();
+        $("#errorRegisterAlert").delay(1500).addClass("in").fadeOut(2000);
+    }
+    if (response.redirect !== undefined && response.redirect) {
 
+        window.location.href = response.redirect_url;
+
+    }
+}

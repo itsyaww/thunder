@@ -12,9 +12,17 @@ function updateProfile(mID) {
             'csrfmiddlewaretoken':$("input[name=csrfmiddlewaretoken]").val()
 
         },
-        success: function(data) {
-            alert("Profile Data Updated")
+        success: function(response) {
+            if (response.success) {
+                $("#successAlert").show();
+                $("#successAlert").delay(500).addClass("in").fadeOut(2000);
+            }else{
+                $("#errorAlert").show();
+                $("#errorAlert").delay(1500).addClass("in").fadeOut(2000);
+            }
+
         }
     });
 
 }
+

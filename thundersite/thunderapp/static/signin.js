@@ -21,8 +21,21 @@ $(function(){
 });
 
 function searchSuccess(response) {
-    if (response.redirect !== undefined && response.redirect) {
-        window.location.href = response.redirect_url;
+
+    if (response.success) {
+        $("#successLoginAlert").show();
+        $("#successLoginAlert").delay(500).addClass("in").fadeOut(2000);
     }
+    else {
+            $("#errorLoginAlert").show();
+            $("#errorLoginAlert").delay(1500).addClass("in").fadeOut(2000);
+
+        }
+    if (response.redirect !== undefined && response.redirect) {
+
+        window.location.href = response.redirect_url;
+
+    }
+
 }
 
