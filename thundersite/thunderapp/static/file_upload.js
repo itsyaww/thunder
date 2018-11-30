@@ -9,8 +9,17 @@ function uploadProfilePicture(mID) {
         type: 'POST',
         url: '/profile/'+mID+'/uploadimage/',
         data:formdata,
-        success: function (data) {
-            $('#profilePicture').load(location.href + " #profilePicture")
+        success: function (response) {
+            if (response.success) {
+                $('#profilePicture').load(location.href + " #profilePicture");
+
+                $("#successAlert").show();
+                $("#successAlert").delay(500).addClass("in").fadeOut(2000);
+
+            }else{
+                $("#errorAlert").show();
+                $("#errorAlert").delay(1500).addClass("in").fadeOut(2000);
+            }
         },
         processData: false,
         contentType: false

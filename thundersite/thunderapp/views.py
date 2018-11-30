@@ -87,26 +87,29 @@ def register(request):
         ln = request.POST.get('lastname')
 
         try:
+
+            if u == "" or p == "" or g == "" or d == "" or e == "" or fn == "" or ln == ""  :
+                return JsonResponse({"success":False})
+
             Member.objects.create(username=u,password=p,gender=g,dateOfBirth=d,email=e,firstName=fn,lastName=ln)
+            member = Member.objects.get(username=u)
+            mid = member.id
+            return JsonResponse({"success":True,"redirect":True,"redirect_url":"http://127.0.0.1:8000/profile/"+str(mid)})
 
         except IntegrityError:
-            raise Http404('Invalid value in field')
+            return JsonResponse({"success":False})
 
-        member = Member.objects.get(username=u)
-        mid = member.id
-        return JsonResponse({"redirect":True,"redirect_url":"http://127.0.0.1:8000/profile/"+str(mid)})
-    else:
-        raise Http404('POST data missing')
 
 @csrf_exempt
 def upload_image(request,member_id):
+
     profileimage = request.FILES.get('profileimage')
 
     m = get_object_or_404(Member,id=member_id)
 
     m.profileImage = profileimage
     m.save()
-    return HttpResponse()
+    return JsonResponse({"success":True})
 
 @loggedin
 def friends(request,user):
@@ -189,7 +192,7 @@ def login(request):
             mid = member.id
             correctpassword = member.password
         except Member.DoesNotExist:
-            Http404('Username/password is incorrect')
+            return JsonResponse({"success":False})
 
         if password == correctpassword:
             # remember user in session variable
@@ -200,7 +203,7 @@ def login(request):
                 'username': username,
                 'loggedin': True
             }
-            response = JsonResponse({"redirect":True,"redirect_url":"http://127.0.0.1:8000/profile/"+str(mid)})
+            response = JsonResponse({"success":True,"redirect":True,"redirect_url":"http://127.0.0.1:8000/profile/"+str(mid)})
             # remember last login in cookie
             now = D.datetime.utcnow()
             max_age = 365 * 24 * 60 * 60  #one year
@@ -210,8 +213,7 @@ def login(request):
             response.set_cookie('last_login',now,expires=expires)
             return response
         else:
-            raise Http404('Username/password is incorrect')
-
+            return JsonResponse({"success":False})
 
 def insertionSort(matchList, matchRank):
     for i in range(len(matchList)):
@@ -238,25 +240,33 @@ def update_profile_details(request,member_id):
     m = get_object_or_404(Member,id=member_id)
 
     if request.method == "PUT":
-        put = QueryDict(request.body)
-        fname = put.get('updatefirstname')
-        lname = put.get('updatelastname')
-        gender = put.get('updategender')
-        email = put.get('updateemail')
+        try:
+            put = QueryDict(request.body)
+            fname = put.get('updatefirstname')
+            lname = put.get('updatelastname')
+            gender = put.get('updategender')
+            email = put.get('updateemail')
 
-        user = User.objects.get(id=member_id)
+            if fname == "":
+                return JsonResponse({"success":False})
 
-        m.firstName = fname
-        m.lastName = lname
-        m.gender = gender
-        m.email = email
+            if lname == "":
+                return JsonResponse({"success":False})
+            if email == "":
+                return JsonResponse({"success":False})
 
-        m.save()
+            m.firstName = fname
+            m.lastName = lname
+            m.gender = gender
+            m.email = email
 
+            m.save()
 
-    member = Member.objects.all()
+        except Member.DoesNotExist:
+            return JsonResponse({"success":False})
 
-    return HttpResponse()
+    return JsonResponse({"success":True})
+
 
 
 
