@@ -1,7 +1,24 @@
 {% extends "thunderapp/base.html" %}
+
 {% block content %}
     Guess who has a match! :)
+
     {% for match in currentMember %}
-        <h6> <a href="https://www.w3schools.com">{{ match.firstName }}</a></h6>
+        <div class="card" style="width: 18rem; height: 30%;">
+          <img class="card-img-top" src="{{ match.profileImage.url }}" alt="Card image cap" style="width: 18rem; height: 80%;">
+          <h4 class="card-title"><b>. {{ match.firstName }}</b></h4>
+        </div>
     {% endfor %}
+
+    <style>
+        body {
+          counter-reset: section;                     /* Set a counter named 'section', and its initial value is 0. */
+        }
+
+        b::before {
+          counter-increment: section;                 /* Increment the value of section counter by 1 */
+          content: counter(section);                  /* Display the value of section counter */
+        }
+    </style>
 {% endblock %}
+

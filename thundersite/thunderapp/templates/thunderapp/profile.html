@@ -11,38 +11,54 @@
         color: white;
     }
 
-    .left {
-        position: absolute;
-        top: 20px;
-        left: 30px;
-
-    }
-
-    .bottom-right {
+    .centered {
         position: absolute;
         top: 50%;
         left: 50%;
         transform: translate(-50%, -50%);
-        font-size: 50px;
-
+        font-size: 55px;
+        text-align: center;
     }
+     .profileImage{
+         max-width:200px;
+     }
+
+
 </style>
-<div class="container-fluid" style="background:rgb(255,255,255) !important;">
+
+{% block alert %}
+
+
+{% include "thunderapp/alerts.html" %}
+
+
+{% endblock %}
+
+
+<div class="container-fluid w3-animate-left carousel-fade" >
     <section class="container">
         <div class="container-page">
             <div class='main-login main-centre'>
                 <br>
                 <div class="bordercontainer">
-                    <img id='img' class="img-fluid" alt="Responsive image"  height=100 width="1500" src="{% static '/border.png' %}">
-                    <div class="bottom-right">{{member.username}}</div>
+                    <img id='img' class="img-fluid" alt="Not found"  height=100 width="1500" src="{% static '/border.png' %}">
+
+                    <div class="centered">{{member.username}}</div>
+                    <br>
+
+                </div>
+                <br>
+
+                <div class="bordercontainer">
+
                     <label id="profilePicture" for="regprofileimage{{member.id}}"  data-toggle="tooltip" title="Upload Profile Image">
 
                         {% if member.profileImage %}
-                        <img id='profile-img' class="rounded-circle left " height=150 src='{{ member.profileImage.url }}'>
+                        <img id='profile-img' class="rounded-circle img-fluid profileImage" alt="Not found" height=150 src='{{ member.profileImage.url }}'>
 
                         {% else %}
 
-                        <img id='profile-img' class="rounded-circle left" height=150 src="{% static '/profile-image.jpg' %}">
+                        <img id='profile-img' class="rounded-circle img-fluid profileImage" alt="Not found" height=150 src="{% static '/profile-image.jpg' %}">
 
                         {% endif %}
                     </label>
@@ -51,19 +67,23 @@
 <div>
     <br>
 
-<span>First Name: <input type="text" class="form-control" id="profilefirstname" value="{{member.firstName}}"> </span>
+    <button id="save{{member.id}}" class="btn btn-lg btn-primary btn-block" onclick="updateProfile('{{member.id}}')">Save Profile</button>
+
+    <br>
+
+<span class="text-white bg-dark">First Name: <input type="text" class="form-control" id="profilefirstname" value="{{member.firstName}}"> </span>
 <br>
 
-<span>Last Name: <input type="text" class="form-control" id="profilelastname" value="{{member.lastName}}"></span>
+<span class="text-white bg-dark">Last Name: <input type="text" class="form-control" id="profilelastname" value="{{member.lastName}}"></span>
     <br>
-    <span>Gender: <input type="text" readonly class="form-control" id="profilegender" value="{{member.gender}}"></span>
-    <br>
-
-
-<span>Date Of Birth: <input type="text" readonly class="form-control" id="profileDOB" value="{{member.dateOfBirth}}"></span>
+    <span class="text-white bg-dark">Gender: <input type="text" readonly class="form-control" id="profilegender" value="{{member.gender}}"></span>
     <br>
 
-    <span>Email: <input type="text"  class="form-control" id="profileemail" value="{{member.email}}"></span>
+
+<span class="text-white bg-dark">Date Of Birth: <input type="text" readonly class="form-control" id="profileDOB" value="{{member.dateOfBirth}}"></span>
+    <br>
+
+    <span class="text-white bg-dark">Email: <input type="text"  class="form-control" id="profileemail" value="{{member.email}}"></span>
     <br>
 
 
@@ -72,13 +92,10 @@
 <br>
     {% csrf_token %}
 
-    <input type="file" name="myFile" id='regprofileimage{{member.id}}' onchange="uploadProfilePicture('{{member.id}}')" style="display:none" >
+    <input type="file" name="myFile" id='regprofileimage{{member.id}}' onchange={uploadProfilePicture(event,'{{member.id}}')} style="display:none" >
 
 
 
-<button id="save{{member.id}}" class="btn btn-lg btn-primary btn-block" onclick="updateProfile('{{member.id}}')">Save Profile</button>
-
-<br>
 
 
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>

@@ -2,37 +2,59 @@
 {% load staticfiles %}
 
 {% block content %}
-<div class="container-fluid">
+{% block alert %}
+
+
+{% include "thunderapp/alerts.html" %}
+
+
+{% endblock %}
+
+<style>
+    .centered {
+        max-width: 300px;
+        margin: auto;
+    }
+</style>
+
+<div class="container-fluid w3-animate-left carousel-fade" >
+    <br>
+
+    <section class="container centered" >
+
+        <img class="mb-4 rounded-circle"  src="{%  static 'thunderlogo.jpg' %}" alt="" width="240" height="240">
+    </section>
+
     <section class="container">
         <div class="container-page">
             <div class='main-login main-centre'>
-                <h3>Please enter your details to sign up</h3>
+                <h3 class="text-white bg-dark">Please enter your details to sign up</h3>
                 <form method='POST' id="signupuser">
                     {% csrf_token %}
                     <div class="form-row">
                         <div class="form-group col-md-6">
-                            <label for="regfirstname">First Name</label>
+                            <label for="regfirstname" class="text-white bg-dark">First Name</label>
                             <input type="text" class="form-control" placeholder="First name" id="regfirstname">
                         </div>
                         <div class="form-group col-md-6">
-                            <label for="reglastname">Last Name</label>
+                            <label for="reglastname" class="text-white bg-dark">Last Name</label>
                             <input type="text" class="form-control" placeholder="Last name" id="reglastname">
                         </div>
                     </div>
                     <div class="form-row">
                         <div class="form-group col-md-6">
-                            <label for="regusername">Username</label>
+                            <label for="regusername" class="text-white bg-dark">Username</label>
                             <input type="text" class="form-control" maxlength="16" placeholder="Username" id="regusername">
                         </div>
                         <div class="form-group col-md-6">
-                            <label for="regpassword">Password</label>
+                            <label for="regpassword" class="text-white bg-dark">Password</label>
                             <input type="password" class="form-control" maxlength="16" placeholder="Password" id="regpassword">
                         </div>
                     </div>
 
                     <div class="form-row">
                         <div class="form-group col-md-6">
-                            <label for="reggender">Gender</label>
+                            <label for="reggender" class="text-white bg-dark">Gender</label>
                             <select name="Gender" id="reggender"class="form-control">
                                 <option value="Male">Male</option>
                                 <option value="Female">Female</option>
@@ -40,12 +62,12 @@
                             </select>
                         </div>
                         <div class="form-group col-md-6">
-                            <label for="regbday">Date Of Birth</label>
+                            <label for="regbday" class="text-white bg-dark">Date Of Birth</label>
                             <input type="date" class="form-control" id="regbday">
                         </div>
                     </div>
-                    <div class="form-group ">
-                        <label for="regEmail">Email</label>
+                    <div class="form-group">
+                        <label for="regEmail" class="text-white bg-dark">Email</label>
                         <input type="text" class="form-control" id="regEmail" placeholder="Email">
 
                     </div>
@@ -57,11 +79,16 @@
                             {% endfor %}
                         </select>
                     </div>
+
                     <input type='submit' value="SUBMIT" id='reguser' class="btn btn-primary">
+
                 </form>
 
             </div>
         </div>
     </section>
 </div>
+
+
+
 {% endblock %}
