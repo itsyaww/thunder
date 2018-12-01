@@ -27,13 +27,19 @@
                 <a class="nav-link text-white hvr-underline-from-center" href="#">Messages</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link text-white hvr-underline-from-center" href="#">Profile</a>
+                {% url 'profile' as profile_url %}
+                <a class="nav-link text-white hvr-underline-from-center" href="{{ profile_url }}/profile/">Profile</a>
             </li>
             <li class="nav-item">
                 <a class="nav-link text-white hvr-underline-from-center" href="#">Find Friends</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link text-white hvr-underline-from-center" href="#">Log Out</a>
+                {% url 'matchlist' as matchlist_url %}
+                <a class="nav-link text-white hvr-underline-from-center" href="{{ matchlist_url }}/matchlist/">Matches</a>
+            </li>
+            <li class="nav-item">
+                {% url 'logout' as logout_url %}
+                <a class="nav-link text-white hvr-underline-from-center" href="{{ logout_url }}/logout/">Log Out</a>
             </li>
             {% else %}
             <li class="nav-item">

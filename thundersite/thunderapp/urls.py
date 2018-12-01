@@ -10,6 +10,8 @@ urlpatterns = [
     path('', views.login, name='index'),
     #Login page
     path('login/', views.login, name='login'),
+    # logout page
+    path('logout/', views.logout, name='logout'),
     #Signup Page
     path('signup/', views.signup, name='signup'),
     #Register
@@ -21,7 +23,7 @@ urlpatterns = [
     #Profile
     path('profile/<int:member_id>', views.get_friend_profile, name='friendprofile'),
     #Display list of people with common hobbies
-    path('matchlist/<int:member_id>', views.matchlist, name='matchlist'),
+    path('matchlist/', views.matchlist, name='matchlist'),
     # messages page
     path('messages/', views.messages, name='messages'),
     # Ajax: check if user exists

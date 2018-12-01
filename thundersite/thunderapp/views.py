@@ -29,6 +29,12 @@ def loggedin(view):
             return render(request,'thunderapp/not-logged-in.html',context)
     return mod_view
 
+@loggedin
+def logout(request, user):
+    request.session.flush()
+
+    context = { 'appname': appname, 'loggedin': False}
+    return render(request,'thunderapp/index.html', context)
 
 @csrf_exempt
 def home(request):
@@ -65,10 +71,12 @@ def profile(request,user):
     return render(request, 'thunderapp/profile.html', context)
 
 
-def matchlist(request, member_id):
-    currentMember = get_object_or_404(Member, pk=member_id)
+
+@loggedin
+def matchlist(request, user):
+    currentMember = get_object_or_404(Member, username=user.username)
     matches = []
-    followers = Member.objects.filter(following__pk=member_id)
+    followers = Member.objects.filter(following__pk=currentMember.id)
 
     for member in currentMember.following.all():
         if member in followers:
@@ -85,7 +93,7 @@ def matchlist(request, member_id):
 
     insertionSort(matches, matchRank)
 
-    context = {'currentMember': matches}
+    context = {'appname': appname, 'currentMember': matches, 'loggedin': True}
     return render(request,'thunderapp/matchlist.html', context)
 
 

@@ -1,16 +1,24 @@
 {% extends "thunderapp/base.html" %}
 
 {% block content %}
-    Guess who has a match! :)
-
-    {% for match in currentMember %}
-        <div class="card" style="width: 18rem; height: 30%;">
-          <img class="card-img-top" src="{{ match.profileImage.url }}" alt="Card image cap" style="width: 18rem; height: 80%;">
-          <h4 class="card-title"><b>. {{ match.firstName }}</b></h4>
-        </div>
-    {% endfor %}
+    <h3>Guess who has a match! :)</h3>
+    <div class="card-columns" >
+        {% for match in currentMember %}
+            {% url 'friendprofile' as profile_url %}
+            <a href="{{ profile_url }}/profile/{{ match.pk }}">
+            <div class="card" style="width: 18rem; height: 30%; border-color: #e1000e">
+              <img class="card-img-top" src="{{ match.profileImage.url }}" alt="Card image cap" style=" max-width: 18em; height: 80%;">
+              <h4 class="card-title"><b>. {{ match.firstName }}</b></h4>
+            </div>
+            </a>
+        {% endfor %}
+    </div>
 
     <style>
+        h3 {
+            color: white;
+        }
+
         body {
           counter-reset: section;                     /* Set a counter named 'section', and its initial value is 0. */
         }
@@ -20,5 +28,6 @@
           content: counter(section);                  /* Display the value of section counter */
         }
     </style>
+
 {% endblock %}
 
