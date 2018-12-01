@@ -1,0 +1,53 @@
+{% extends "thunderapp/base.html" %}
+
+{% load staticfiles %}
+
+
+{% block content %}
+<div class="container-fluid w3-animate-left carousel-fade" >
+    <section class="container">
+        <div class="container-page">
+            <div class='main-login main-centre'>
+                <br>
+                <div class="bordercontainer" >
+                    <img id='img' class="img-fluid" alt="Not found"  height=100 width="1500" src="{% static '/border.png' %}">
+
+                    <div class="centered">Suggested profiles to follow:</div>
+                    <br>
+                </div>
+                <div class="bordercontainer text-white bg-dark">
+                <input type="text" id="search" name="search" placeholder="Filter Members"/>
+                </div>
+                <br>
+<br>
+                {% block alert %}
+                {% include "thunderapp/searchmembers.html" %}
+                {% endblock %}
+            </div>
+        </div>
+    </section>
+</div>
+<style>
+    .bordercontainer {
+        position: relative;
+        text-align: center;
+        color: white;
+    }
+
+    .centered {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        font-size: 40px;
+        text-align: center;
+    }
+    .profileImage{
+        height:150px;
+
+        max-width:150px;
+    }
+
+
+</style>
+{% endblock %}
