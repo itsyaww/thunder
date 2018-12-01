@@ -4,8 +4,8 @@ $(function(){
     $(document).on('submit', '#usersignin' , function(e){
     e.preventDefault();
     var context ={
-        'loginusername' : $('#inputUserName').val(),
-        'loginpassword':$('#inputPassword').val(),
+        'username' : $('#inputUserName').val(),
+        'password':$('#inputPassword').val(),
         csrfmiddlewaretoken:$("input[name=csrfmiddlewaretoken]").val()
 
     };

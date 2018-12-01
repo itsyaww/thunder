@@ -44,16 +44,12 @@ class Member(User):
               (FEMALE,'FEMALE'),
               (OTHER,'OTHER'))
 
-    #User Defining Attributes
-    # username = models.CharField(max_length=15, unique=True,)
-    # password = models.CharField(max_length=30)
-    # email = models.EmailField(max_length=254, default='unknown@unknown.com')
 
     #General Attributes
     firstName = models.CharField(max_length=30) #all choices null=False by default - user MUST input data
     lastName = models.CharField(max_length=30)
     dateOfBirth = models.DateField(max_length=8, default='YYYY-MM-DD')
-    gender = models.CharField(max_length=7, null=True)
+    gender = models.CharField(max_length=7, null=True, choices=GENDER)
     profileImage = models.ImageField(upload_to='profile_images', default=None)
 
     #Fields with many to many relations
@@ -65,7 +61,7 @@ class Member(User):
     )
 
     def __str__(self):
-        return 'Username: ' + self.username + ' Email:' + self.email
+        return 'Username: ' + self.username + ' Email:' + self.email + ' Password:' + self.password
 
 
 class Message(models.Model):
