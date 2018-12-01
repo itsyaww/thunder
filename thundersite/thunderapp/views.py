@@ -99,6 +99,7 @@ def register(request):
         except IntegrityError:
             return JsonResponse({"success":False})
 
+    return render(request, 'thunderapp/signup.html')
 
 @csrf_exempt
 def upload_image(request,member_id):
