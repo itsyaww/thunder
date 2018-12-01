@@ -103,13 +103,14 @@ def register(request):
 
 @csrf_exempt
 def upload_image(request,member_id):
-
     profileimage = request.FILES.get('profileimage')
-
     m = get_object_or_404(Member,id=member_id)
 
-    m.profileImage = profileimage
-    m.save()
+    try:
+        m.profileImage = profileimage
+        m.save()
+    except IntegrityError:
+        return JsonResponse({"success":False})
     return JsonResponse({"success":True})
 
 @loggedin
