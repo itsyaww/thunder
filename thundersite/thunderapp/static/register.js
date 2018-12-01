@@ -24,6 +24,9 @@ $(function(){
     });
 
     });
+
+    $('#reghobby').searchableOptionList();
+
 });
 
 function searchSuccess(response) {

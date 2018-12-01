@@ -1,8 +1,9 @@
 from django.views.decorators.csrf import csrf_exempt
 from django.shortcuts import render,get_object_or_404
-from django.http import HttpResponse, Http404, JsonResponse
+from django.http import HttpResponse, Http404, JsonResponse, HttpResponseRedirect
+from django.urls import reverse
 from django.utils import timezone
-from thunderapp.models import Member, Message
+from thunderapp.models import Member, Message, Hobby
 from django.db import IntegrityError
 import datetime as D
 from django.http import QueryDict
@@ -38,7 +39,9 @@ def index(request):
 
 @csrf_exempt
 def signup(request):
-    context = { 'appname': appname }
+    context = { 'appname': appname,
+                'Hobby': Hobby
+                }
     return render(request,'thunderapp/signup.html',context)
 
 @csrf_exempt
@@ -94,11 +97,11 @@ def register(request):
             Member.objects.create(username=u,password=p,gender=g,dateOfBirth=d,email=e,firstName=fn,lastName=ln)
             member = Member.objects.get(username=u)
             mid = member.id
+             # todo add HttpResponseRedirect(reverse('news-year-archive', args=(year,))
             return JsonResponse({"success":True,"redirect":True,"redirect_url":"http://127.0.0.1:8000/profile/"+str(mid)})
 
         except IntegrityError:
             return JsonResponse({"success":False})
-
     return render(request, 'thunderapp/signup.html')
 
 @csrf_exempt
