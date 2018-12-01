@@ -19,6 +19,9 @@ urlpatterns = [
     #Upload Image
     path('profile/<int:member_id>/uploadimage/', views.upload_image, name='register'),
     path('profile/<int:member_id>/updateprofile/', views.update_profile_details, name='updateprofile'),
+    path('profiles/', views.list_of_members, name='listofmembers'),
+    path('profiles/search/', views.search_members, name='searchmembers'),
+
     path('profile/', views.profile, name='profile'),
     #Profile
     path('profile/<int:member_id>', views.get_friend_profile, name='friendprofile'),

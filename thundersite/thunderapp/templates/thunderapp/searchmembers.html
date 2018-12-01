@@ -1,0 +1,57 @@
+{% load staticfiles %}
+
+{% block search %}
+
+
+<div id="results" class=" bordercontainer" >
+    <ol>
+        {% if members.count > 0 %}
+
+        {% for m in members %}
+        <br>
+        <div class="form-group  text-white bg-dark w3-animate-bottom carousel-fade" >
+            <br>
+
+            {% if m.profileImage %}
+
+            <img class="rounded-circle img-fluid profileImage" onerror="this.src='{{STATIC_URL}}/static/image-not-found.png'" alt="Not found" height=150 width="150" src='{{ m.profileImage.url }}'>
+
+            {% else %}
+
+            <img  class="rounded-circle img-fluid profileImage" alt="Not found" height=100 src="{% static '/profile-image.jpg' %}">
+
+            {% endif %}
+            <br>
+            <br>
+
+
+            <div>Name: {{m.firstName}} {{m.lastName}}</div>
+            <br>
+            <div>Gender: {{m.gender}}</div>
+            <br>
+            <div>Date Of Birth: {{m.dateOfBirth}}</div>
+            <br>
+            <input type="button" class="btn btn-success btn-lg" value="Add Friend" onClick="this.disabled=true; this.value='Friends';setColor(event)"/>
+            <br>                        <br>
+
+<script>
+    function setColor(e) {
+        var target = e.target,
+            count = +target.dataset.count;
+
+        target.style.backgroundColor = '#ff000e';
+        target.style.borderColor = '#ff000e';
+
+        target.dataset.count = count === 1 ? 0 : 1;
+    }
+</script>
+        </div>
+
+
+        {% endfor %}
+        {% endif %}
+    </ol>
+
+</div>
+{% endblock %}
+

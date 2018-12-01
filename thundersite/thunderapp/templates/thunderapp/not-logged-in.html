@@ -1,5 +1,36 @@
+
 {% extends "thunderapp/base.html" %}
+{% load staticfiles %}
 
 {% block content %}
-    <span class='info'>&#8658; You must be logged in to view this page.</span><br><br>
-{% endblock %}
+<div class="container-fluid w3-animate-bottom  text-white bg-dark centered" >
+    <section class="container">
+        <div class="container-page">
+            <div class='main-login main-centre'>
+                <section class="container">
+
+                    <img class="mb-4 rounded-circle w3-center carousel-fade" src="{%  static 'thunderlogo.jpg' %}" alt="" width="240" height="240">
+                </section>
+
+
+                <span class='info'>You must be logged in to view this page.</span>
+
+
+            </div>
+        </div>
+    </section>
+
+    <style>
+        .centered {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 40px;
+            text-align: center;
+        }
+    </style>
+
+</div>{% endblock %}
+
+

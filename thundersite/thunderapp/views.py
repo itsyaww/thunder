@@ -122,7 +122,7 @@ def register(request):
             member = Member.objects.get(username=u)
             mid = member.id
              # todo add HttpResponseRedirect(reverse('news-year-archive', args=(year,))
-            return JsonResponse({"success":True,"redirect":True,"redirect_url":"http://127.0.0.1:8000/profile/"+str(mid)})
+            return JsonResponse({"success": True, "redirect": True, "redirect_url": "http://127.0.0.1:8000/profile/"+mid})
 
         except IntegrityError:
             return JsonResponse({"success":False})
@@ -307,6 +307,28 @@ def update_profile_details(request,member_id):
 
     return JsonResponse({"success":True})
 
+
+def list_of_members(request):
+    members = Member.objects.all()
+
+    context = {'members': members}
+    return render(request, 'thunderapp/listofmembers.html',context)
+
+
+def search_members(request):
+    if request.method == "GET":
+        search = request.GET['search_members']
+    else:
+        search = ''
+
+    name = search
+    if search == "":
+        members = Member.objects.all()
+        return render(request, 'thunderapp/searchmembers.html', {'members': members})
+
+    members = Member.objects.filter(firstName__contains= name)
+
+    return render(request, 'thunderapp/searchmembers.html', {'members': members})
 
 
 
