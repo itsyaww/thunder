@@ -25,6 +25,9 @@ function searchSuccess(response) {
     if (response.success) {
         $("#successLoginAlert").show();
         $("#successLoginAlert").delay(500).addClass("in").fadeOut(2000);
+        console.log("LOGIN SUCCESSFUL");
+        alert("Login Successful! You will now be redirected.");
+        window.location.href = "/profile/";
     }
     else {
             $("#errorLoginAlert").show();
