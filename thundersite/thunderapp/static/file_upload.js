@@ -1,5 +1,8 @@
 
-function uploadProfilePicture(mID) {
+function uploadProfilePicture(event,mID) {
+    if (!event.target.files[0]) {
+        return
+    }
     var formdata = new FormData();
     var file = document.getElementById('regprofileimage'+mID).files[0];
     formdata.append('profileimage', file);
@@ -25,4 +28,3 @@ function uploadProfilePicture(mID) {
         contentType: false
     });
 }
-

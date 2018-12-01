@@ -92,7 +92,7 @@
 <br>
     {% csrf_token %}
 
-    <input type="file" name="myFile" id='regprofileimage{{member.id}}' onchange="uploadProfilePicture('{{member.id}}')" style="display:none" >
+    <input type="file" name="myFile" id='regprofileimage{{member.id}}' onchange={uploadProfilePicture(event,'{{member.id}}')} style="display:none" >
 
 
 
