@@ -28,20 +28,26 @@
                 <a class="nav-link text-white hvr-underline-from-center" href="#">Messages</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link text-white hvr-underline-from-center" href="#">Profile</a>
+                {% url 'profile' as profile_url %}
+                <a class="nav-link text-white hvr-underline-from-center" href="{{ profile_url }}/profile/">Profile</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link text-white hvr-underline-from-center" href="#">Find Friends</a>
+                <a class="nav-link text-white hvr-underline-from-center" href="{{ profiles_url }}/profiles/">Find Friends</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link text-white hvr-underline-from-center" href="#">Log Out</a>
+                {% url 'matchlist' as matchlist_url %}
+                <a class="nav-link text-white hvr-underline-from-center" href="{{ matchlist_url }}/matchlist/">Matches</a>
+            </li>
+            <li class="nav-item">
+                {% url 'logout' as logout_url %}
+                <a class="nav-link text-white hvr-underline-from-center" href="{{ logout_url }}/logout/">Log Out</a>
             </li>
             {% else %}
             <li class="nav-item">
-                <a class="nav-link text-white hvr-underline-from-center" href="#">Log in</a>
+                <a class="nav-link text-white hvr-underline-from-center" href="{{ login_url }}/login/">Log in</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link text-white hvr-underline-from-center" href="#">Sign Up</a>
+                <a class="nav-link text-white hvr-underline-from-center" href="{{ register_url }}/register/">Sign Up</a>
             </li>
             {% endif %}
         </ul>
@@ -61,5 +67,8 @@
 <script type="text/javascript" src="{% static 'edit_profile_details.js' %}"></script>
 <script type="text/javascript" src="{% static 'register.js' %}"></script>
 <script type="text/javascript" src="{% static 'sol.js' %}"></script>
+<script type="text/javascript" src="{% static 'listProfiles.js' %}"></script>
+<script type="text/javascript" src="{% static 'search_members.js' %}"></script>
+
 </body>
 </html>

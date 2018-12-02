@@ -20,6 +20,8 @@
         text-align: center;
     }
      .profileImage{
+         height:200px;
+
          max-width:200px;
      }
 
@@ -54,7 +56,7 @@
                     <label id="profilePicture" for="regprofileimage{{member.id}}"  data-toggle="tooltip" title="Upload Profile Image">
 
                         {% if member.profileImage %}
-                        <img id='profile-img' class="rounded-circle img-fluid profileImage" alt="Not found" height=150 src='{{ member.profileImage.url }}'>
+                        <img id='profile-img' class="rounded-circle img-fluid profileImage" alt="Not found" onerror="this.src='{{STATIC_URL}}/static/image-not-found.png'" height=150 src='{{ member.profileImage.url }}'>
 
                         {% else %}
 
@@ -63,7 +65,6 @@
                         {% endif %}
                     </label>
                 </div>
-
     <div>
             <br>
 
@@ -78,7 +79,6 @@
             <br>
             <span class="text-white bg-dark">Gender: <input type="text" readonly class="form-control" id="profilegender" value="{{member.gender}}"></span>
             <br>
-
 
         <span class="text-white bg-dark">Date Of Birth: <input type="text" readonly class="form-control" id="profileDOB" value="{{member.dateOfBirth}}"></span>
             <br>
@@ -98,6 +98,33 @@
                 {% endfor %}
             </select>
         </div>
+
+    {% endif %}
+
+                {% if not loggedin %}
+
+                <br>
+
+                <span class="text-white bg-dark">First Name: <input type="text" readonly class="form-control" id="profilefirstname" value="{{member.firstName}}"> </span>
+                <br>
+
+                <span class="text-white bg-dark">Last Name: <input type="text" readonly class="form-control" id="profilelastname" value="{{member.lastName}}"></span>
+                <br>
+                <span class="text-white bg-dark">Gender: <input type="text" readonly class="form-control" id="profilegender" value="{{member.gender}}"></span>
+                <br>
+
+
+                <span class="text-white bg-dark">Date Of Birth: <input type="text" readonly class="form-control" id="profileDOB" value="{{member.dateOfBirth}}"></span>
+                <br>
+
+                <span class="text-white bg-dark">Email: <input type="text"  class="form-control" readonly id="profileemail" value="{{member.email}}"></span>
+                <br>
+                {% endif %}
+
+
+            </div>
+
+            <br>
 
     </div>
 

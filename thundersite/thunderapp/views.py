@@ -25,8 +25,16 @@ def loggedin(view):
             except Member.DoesNotExist: raise Http404('Member does not exist')
             return view(request, user)
         else:
-            return render(request,'thunderapp/not-logged-in.html',{})
+            context = {'appname': appname}
+            return render(request,'thunderapp/not-logged-in.html',context)
     return mod_view
+
+@loggedin
+def logout(request, user):
+    request.session.flush()
+
+    context = { 'appname': appname, 'loggedin': False}
+    return render(request,'thunderapp/index.html', context)
 
 @csrf_exempt
 def home(request):
@@ -37,6 +45,7 @@ def index(request):
     context = { 'appname': appname }
     return render(request,'thunderapp/index.html',context)
 
+
 @csrf_exempt
 def signup(request):
     context = { 'appname': appname,
@@ -44,17 +53,31 @@ def signup(request):
                 }
     return render(request,'thunderapp/signup.html',context)
 
-@csrf_exempt
-def profile(request,member_id):
+
+def get_friend_profile(request,member_id):
     member = get_object_or_404(Member, pk=member_id)
     context = {'member': member,
                'Hobby': Hobby}
     return render(request, 'thunderapp/profile.html', context)
 
-def matchlist(request, member_id):
-    currentMember = get_object_or_404(Member, pk=member_id)
+
+@loggedin
+def profile(request,user):
+    member = get_object_or_404(Member, username=user.username)
+    context = {
+        'member':member,
+        'appname': appname,
+        'loggedin': True
+    }
+    return render(request, 'thunderapp/profile.html', context)
+
+
+
+@loggedin
+def matchlist(request, user):
+    currentMember = get_object_or_404(Member, username=user.username)
     matches = []
-    followers = Member.objects.filter(following__pk=member_id)
+    followers = Member.objects.filter(following__pk=currentMember.id)
 
     for member in currentMember.following.all():
         if member in followers:
@@ -71,13 +94,14 @@ def matchlist(request, member_id):
 
     insertionSort(matches, matchRank)
 
-    context = {'currentMember': matches}
+    context = {'appname': appname, 'currentMember': matches, 'loggedin': True}
     return render(request,'thunderapp/matchlist.html', context)
 
 
 def messages(request):
     context = { 'appname': appname }
     return render(request,'thunderapp/messages.html',context)
+
 
 @csrf_exempt
 def register(request):
@@ -106,6 +130,7 @@ def register(request):
             return JsonResponse({"success":False})
     return render(request, 'thunderapp/signup.html')
 
+
 @csrf_exempt
 def upload_image(request,member_id):
     profileimage = request.FILES.get('profileimage')
@@ -117,6 +142,7 @@ def upload_image(request,member_id):
     except IntegrityError:
         return JsonResponse({"success":False})
     return JsonResponse({"success":True})
+
 
 @loggedin
 def friends(request,user):
@@ -153,6 +179,8 @@ def checkuser(request):
     if request.POST['page'] == 'register':
         return HttpResponse("<span class='taken'>&nbsp;&#x2718; This username is taken</span>")
     return HttpResponse("<span class='taken'>&nbsp;&#x2718; Invalid request</span>")
+
+
 @loggedin
 def post_message(request, user):
     if request.method=='POST' and 'recip' in request.POST:
@@ -183,48 +211,57 @@ def erase_message(request, user):
     else:
         raise Http404('Missing id in POST')
 
-
 @csrf_exempt
 def login(request):
-    if not ('loginusername' in request.POST and 'loginpassword' in request.POST):
-        context = { 'appname': appname }
-        return render(request,'thunderapp/login.html',context)
+    if 'username' in request.POST and 'password' in request.POST:
+        print("Post login request")
+        username = request.POST['username']
+        password = request.POST['password']
+        return handle_user(request, username,password)
+    elif request.session.get('username'):
+        print("Session login request")
+        username = request.session.get('username')
+        password = request.session.get('password')
+        return handle_user(request,username,password)
     else:
-        username = request.POST['loginusername']
-        password = request.POST['loginpassword']
-        correctpassword = None
-        mid = None
-        try:
-            member = Member.objects.get(username=username)
-            mid = member.id
-            correctpassword = member.password
-        except Member.DoesNotExist:
-            return JsonResponse({"success":False})
+        context = {'appname': appname}
+        return render(request, 'thunderapp/login.html', context)
 
-        if password == correctpassword:
-            # remember user in session variable
-            request.session['username'] = username
-            request.session['password'] = password
-            context = {
-                'appname': appname,
-                'username': username,
-                'loggedin': True
-            }
-            response = JsonResponse({"success":True,"redirect":True,"redirect_url":"http://127.0.0.1:8000/profile/"+str(mid)})
-            # remember last login in cookie
-            now = D.datetime.utcnow()
-            max_age = 365 * 24 * 60 * 60  #one year
-            delta = now + D.timedelta(seconds=max_age)
-            format = "%a, %d-%b-%Y %H:%M:%S GMT"
-            expires = D.datetime.strftime(delta, format)
-            response.set_cookie('last_login',now,expires=expires)
-            return response
-        else:
-            return JsonResponse({"success":False})
+
+def handle_user(request, username, password):
+    try:
+        member = Member.objects.get(username=username)
+        print(str(member))
+    except Member.DoesNotExist:
+        return JsonResponse({"success":False})
+    if member.password == password:
+        # remember user in session variable
+        request.session['username'] = username
+        request.session['password'] = password
+        context = {
+            'appname': appname,
+            'username': username,
+            'member': member,
+            'loggedin': True
+        }
+        response = render(request, 'thunderapp/login.html', context)
+        # remember last login in cookie
+        now = D.datetime.utcnow()
+        max_age = 365 * 24 * 60 * 60  # one year
+        delta = now + D.timedelta(seconds=max_age)
+        format = "%a, %d-%b-%Y %H:%M:%S GMT"
+        expires = D.datetime.strftime(delta, format)
+        response.set_cookie('last_login', now, expires=expires)
+        return response
+    else:
+        print("Password Error")
+        return JsonResponse({"success":False})
+
 
 def insertionSort(matchList, matchRank):
     for i in range(len(matchList)):
         insert(matchRank[i], matchRank, i, matchList, matchList[i])
+
 
 def insert(k, matchRank, hi, matchList, member):
     for i in range(hi, 0, -1):
@@ -237,8 +274,6 @@ def insert(k, matchRank, hi, matchList, member):
             matchList[i] = matchList[i - 1]
     matchRank[0] = k
     matchList[0] = member
-
-
 
 
 @csrf_exempt
@@ -274,6 +309,28 @@ def update_profile_details(request,member_id):
 
     return JsonResponse({"success":True})
 
+@loggedin
+def list_of_members(request,user):
+    members = Member.objects.all()
+
+    context = {'members': members, 'loggedin': True}
+    return render(request, 'thunderapp/listofmembers.html',context)
+
+@loggedin
+def search_members(request,user):
+    if request.method == "GET":
+        search = request.GET['search_members']
+    else:
+        search = ''
+
+    name = search
+    if search == "":
+        members = Member.objects.all()
+        return render(request, 'thunderapp/searchmembers.html', {'members': members,'loggedin': True})
+
+    members = Member.objects.filter(firstName__contains= name)
+
+    return render(request, 'thunderapp/searchmembers.html', {'members': members,'loggedin': True})
 
 
 

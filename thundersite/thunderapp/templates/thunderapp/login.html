@@ -24,9 +24,10 @@
             <div class='main-login main-centre'>
 <div class="input-group">
        {% if loggedin %}
+           {% url 'profile' as profile_url%}
             @<h1 class="h3 mb-3 font-weight-normal">
-                You are now logged in.
-                Please <a href="{% url 'home'%}">click here</a> to continue.
+                You are logged in.
+                Please <a href="{{ profile_url }}/profile/">click here</a> to continue.
             </h1>
             <br><br>
        {% else %}
