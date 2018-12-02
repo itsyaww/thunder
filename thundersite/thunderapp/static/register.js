@@ -2,26 +2,26 @@
 $(function(){
 
     $(document).on('submit', '#signupuser' , function(e){
-    e.preventDefault();
-    var context ={
-            'firstname': $('#regfirstname').val(),
-            'lastname': $('#reglastname').val(),
-            'username' : $('#regusername').val(),
-            'password':$('#regpassword').val(),
-            'gender':$('#reggender').val(),
-            'DofB':$('#regbday').val(),
-            'email':$('#regEmail').val(),
+        e.preventDefault();
+        var context ={
+                'firstname': $('#regfirstname').val(),
+                'lastname': $('#reglastname').val(),
+                'username' : $('#regusername').val(),
+                'password':$('#regpassword').val(),
+                'gender':$('#reggender').val(),
+                'DofB':$('#regbday').val(),
+                'email':$('#regEmail').val(),
+                'hobby':$('#reghobby').val(),
+                csrfmiddlewaretoken:$("input[name=csrfmiddlewaretoken]").val()
 
-            csrfmiddlewaretoken:$("input[name=csrfmiddlewaretoken]").val()
+        };
 
-    };
-
-    $.ajax({
-        type: "POST",
-        url:'/register/',
-        data: context ,
-        success: searchSuccess
-    });
+        $.ajax({
+            type: "POST",
+            url:'/register/',
+            data: context ,
+            success: searchSuccess
+        });
 
     });
 

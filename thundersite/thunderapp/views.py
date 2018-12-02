@@ -47,7 +47,8 @@ def signup(request):
 @csrf_exempt
 def profile(request,member_id):
     member = get_object_or_404(Member, pk=member_id)
-    context = {'member': member}
+    context = {'member': member,
+               'Hobby': Hobby}
     return render(request, 'thunderapp/profile.html', context)
 
 def matchlist(request, member_id):
@@ -88,7 +89,8 @@ def register(request):
         e = request.POST.get('email')
         fn = request.POST.get('firstname')
         ln = request.POST.get('lastname')
-
+        #todo add hobby to profile
+        hobby = request.POST.getlist('hobby[]')
         try:
 
             if u == "" or p == "" or g == "" or d == "" or e == "" or fn == "" or ln == ""  :
@@ -251,7 +253,7 @@ def update_profile_details(request,member_id):
             lname = put.get('updatelastname')
             gender = put.get('updategender')
             email = put.get('updateemail')
-
+            hobby = put.getlist('updatehobby')
             if fname == "":
                 return JsonResponse({"success":False})
 
