@@ -122,7 +122,7 @@ def register(request):
             member = Member.objects.get(username=u)
             mid = member.id
              # todo add HttpResponseRedirect(reverse('news-year-archive', args=(year,))
-            return JsonResponse({"success": True, "redirect": True, "redirect_url": "http://127.0.0.1:8000/profile/"+mid})
+            return JsonResponse({"success":True,"redirect":True,"redirect_url":"http://127.0.0.1:8000/profile/"+str(mid)})
 
         except IntegrityError:
             return JsonResponse({"success":False})
@@ -231,7 +231,7 @@ def handle_user(request, username, password):
         member = Member.objects.get(username=username)
         print(str(member))
     except Member.DoesNotExist:
-        raise Http404('User does not exist')
+        return JsonResponse({"success":False})
     if member.password == password:
         # remember user in session variable
         request.session['username'] = username
@@ -253,7 +253,7 @@ def handle_user(request, username, password):
         return response
     else:
         print("Password Error")
-        raise Http404('Wrong password')
+        return JsonResponse({"success":False})
 
 
 def insertionSort(matchList, matchRank):
@@ -307,15 +307,15 @@ def update_profile_details(request,member_id):
 
     return JsonResponse({"success":True})
 
-
-def list_of_members(request):
+@loggedin
+def list_of_members(request,user):
     members = Member.objects.all()
 
-    context = {'members': members}
+    context = {'members': members, 'loggedin': True}
     return render(request, 'thunderapp/listofmembers.html',context)
 
-
-def search_members(request):
+@loggedin
+def search_members(request,user):
     if request.method == "GET":
         search = request.GET['search_members']
     else:
@@ -324,11 +324,11 @@ def search_members(request):
     name = search
     if search == "":
         members = Member.objects.all()
-        return render(request, 'thunderapp/searchmembers.html', {'members': members})
+        return render(request, 'thunderapp/searchmembers.html', {'members': members,'loggedin': True})
 
     members = Member.objects.filter(firstName__contains= name)
 
-    return render(request, 'thunderapp/searchmembers.html', {'members': members})
+    return render(request, 'thunderapp/searchmembers.html', {'members': members,'loggedin': True})
 
 
 

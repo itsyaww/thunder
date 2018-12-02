@@ -68,8 +68,11 @@
 
 <div>
     <br>
+    {% if loggedin %}
 
-    <button id="save{{member.id}}" class="btn btn-lg btn-primary btn-block" onclick="updateProfile('{{member.id}}')">Save Profile</button>
+    <button id="save{{member.id}}"  class="btn btn-lg btn-primary btn-block" onclick="updateProfile('{{member.id}}')">Save Profile</button>
+
+
 
     <br>
 
@@ -86,15 +89,42 @@
     <br>
 
     <span class="text-white bg-dark">Email: <input type="text"  class="form-control" id="profileemail" value="{{member.email}}"></span>
-    <br>
+    <br>    <input type="file" name="myFile" id='regprofileimage{{member.id}}' onchange={uploadProfilePicture(event,'{{member.id}}')} style="display:none" >
 
+
+    {% endif %}
 
 </div>
 
 <br>
     {% csrf_token %}
 
-    <input type="file" name="myFile" id='regprofileimage{{member.id}}' onchange={uploadProfilePicture(event,'{{member.id}}')} style="display:none" >
+
+                {% if not loggedin %}
+
+                <br>
+
+                <span class="text-white bg-dark">First Name: <input type="text" readonly class="form-control" id="profilefirstname" value="{{member.firstName}}"> </span>
+                <br>
+
+                <span class="text-white bg-dark">Last Name: <input type="text" readonly class="form-control" id="profilelastname" value="{{member.lastName}}"></span>
+                <br>
+                <span class="text-white bg-dark">Gender: <input type="text" readonly class="form-control" id="profilegender" value="{{member.gender}}"></span>
+                <br>
+
+
+                <span class="text-white bg-dark">Date Of Birth: <input type="text" readonly class="form-control" id="profileDOB" value="{{member.dateOfBirth}}"></span>
+                <br>
+
+                <span class="text-white bg-dark">Email: <input type="text"  class="form-control" readonly id="profileemail" value="{{member.email}}"></span>
+                <br>
+                {% endif %}
+
+
+            </div>
+
+            <br>
+
 
 
 
