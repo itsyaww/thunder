@@ -1,3 +1,4 @@
+
 function updateProfile(mID) {
 
     $.ajax({
@@ -8,7 +9,7 @@ function updateProfile(mID) {
             'updatelastname':$('#profilelastname').val(),
             'updategender':$('#profilegender').val(),
             'updateemail':$('#profileemail').val(),
-
+            'updatehobby':$('#profilehobby').val(),
             'csrfmiddlewaretoken':$("input[name=csrfmiddlewaretoken]").val()
 
         },
@@ -23,6 +24,8 @@ function updateProfile(mID) {
 
         }
     });
-
 }
+$(function(){
+    $('#profilehobby').searchableOptionList();
+});
 

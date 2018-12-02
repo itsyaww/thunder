@@ -65,40 +65,41 @@
                         {% endif %}
                     </label>
                 </div>
+    <div>
+            <br>
 
-<div>
-    <br>
-    {% if loggedin %}
+            <button id="save{{member.id}}" class="btn btn-lg btn-primary btn-block" onclick="updateProfile('{{member.id}}')">Save Profile</button>
 
-    <button id="save{{member.id}}"  class="btn btn-lg btn-primary btn-block" onclick="updateProfile('{{member.id}}')">Save Profile</button>
+            <br>
 
+        <span class="text-white bg-dark">First Name: <input type="text" class="form-control" id="profilefirstname" value="{{member.firstName}}"> </span>
+        <br>
 
+        <span class="text-white bg-dark">Last Name: <input type="text" class="form-control" id="profilelastname" value="{{member.lastName}}"></span>
+            <br>
+            <span class="text-white bg-dark">Gender: <input type="text" readonly class="form-control" id="profilegender" value="{{member.gender}}"></span>
+            <br>
 
-    <br>
+        <span class="text-white bg-dark">Date Of Birth: <input type="text" readonly class="form-control" id="profileDOB" value="{{member.dateOfBirth}}"></span>
+            <br>
 
-<span class="text-white bg-dark">First Name: <input type="text" class="form-control" id="profilefirstname" value="{{member.firstName}}"> </span>
-<br>
+            <span class="text-white bg-dark">Email: <input type="text"  class="form-control" id="profileemail" value="{{member.email}}"></span>
+            <br>
 
-<span class="text-white bg-dark">Last Name: <input type="text" class="form-control" id="profilelastname" value="{{member.lastName}}"></span>
-    <br>
-    <span class="text-white bg-dark">Gender: <input type="text" readonly class="form-control" id="profilegender" value="{{member.gender}}"></span>
-    <br>
-
-
-<span class="text-white bg-dark">Date Of Birth: <input type="text" readonly class="form-control" id="profileDOB" value="{{member.dateOfBirth}}"></span>
-    <br>
-
-    <span class="text-white bg-dark">Email: <input type="text"  class="form-control" id="profileemail" value="{{member.email}}"></span>
-    <br>    <input type="file" name="myFile" id='regprofileimage{{member.id}}' onchange={uploadProfilePicture(event,'{{member.id}}')} style="display:none" >
-
+        <div class="form-group ">
+            <label for="profilehobby" class="text-white bg-dark">Hobbies</label>
+            <select  id="profilehobby" name="hobbies" multiple="multiple">
+                {% for key, value in Hobby.HOBBY_CHOICES %}
+                    {% if value in member.hobby  %}
+                        <option selected value="{{key}}">{{value}}</option>
+                    {% else %}
+                        <option value="{{key}}">{{value}}</option>
+                    {% endif %}
+                {% endfor %}
+            </select>
+        </div>
 
     {% endif %}
-
-</div>
-
-<br>
-    {% csrf_token %}
-
 
                 {% if not loggedin %}
 
@@ -125,12 +126,13 @@
 
             <br>
 
+    </div>
 
+    <br>
+        {% csrf_token %}
 
+        <input type="file" name="myFile" id='regprofileimage{{member.id}}' onchange={uploadProfilePicture(event,'{{member.id}}')} style="display:none" >
 
-
-
-<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
             </div>
         </div>
     </section>
