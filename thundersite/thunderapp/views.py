@@ -9,6 +9,7 @@ import datetime as D
 from django.http import QueryDict
 from django.db.models import Q
 
+
 from django.contrib.auth.models import User
 
 
@@ -97,11 +98,41 @@ def matchlist(request, user):
     context = {'appname': appname, 'currentMember': matches, 'loggedin': True}
     return render(request,'thunderapp/matchlist.html', context)
 
-
-def messages(request):
-    context = { 'appname': appname,  'loggedin': True }
-    return render(request,'thunderapp/messages.html',context)
-
+@csrf_exempt
+def messages(request, user):
+    # Whose messages are we viewing?
+    if 'view' in request.GET:
+        view = request.GET['view']
+        try: view_user = Member.objects.get(username=view)
+        except Member.DoesNotExist: raise Http404('Member does not exist')
+        profile = view_user.profile
+        # public messages that 'view_user' has received
+        m1 = Message.objects.filter(recip=view_user,public=True)
+        # public messages that 'view_user' has sent
+        m2 = Message.objects.filter(sender=view_user,public=True)
+        # messages 'user' sent 'view_user'
+        m3 = Message.objects.filter(sender=user,recip=view_user)
+        # messages 'view_user' sent 'user'
+        m4 = Message.objects.filter(sender=view_user,recip=user)
+        # union of the four query sets
+        messages = m1.union(m2,m3,m4).order_by('-time')
+    else:
+        view = user.username
+        profile = user.firstName
+        # all messages I sent
+        m1 = Message.objects.filter(sender=user)
+        # all messages I received
+        m2 = Message.objects.filter(recip=user)
+        # union of the two query sets
+        messages = m1.union(m2).order_by('-time')
+    return render(request, 'thunderapp/messages.html', {
+        'appname': appname,
+        'username': user.username,
+        'profile': profile,
+        'view': view,
+        'messages': messages,
+        'loggedin': True}
+                  )
 
 @csrf_exempt
 def register(request):
@@ -124,7 +155,7 @@ def register(request):
             member = Member.objects.get(username=u)
             mid = member.id
              # todo add HttpResponseRedirect(reverse('news-year-archive', args=(year,))
-            return JsonResponse({"success":True,"redirect":True,"redirect_url":"http://127.0.0.1:8000/profile/"+str(mid)})
+            return JsonResponse({"success":True,"redirect":True,"redirect_url":"http://127.0.0.1:8000/profile/"+ mid})
 
         except IntegrityError:
             return JsonResponse({"success":False})
@@ -159,7 +190,7 @@ def friends(request,user):
     #     'followers': followers,
     #     'loggedin': True
     # }
-    return render(request, 'mainapp/friends.html', context)
+    return render(request, 'thunderapp/friends.html', context)
 
 
 # view function that responses to Ajax requests on login/register pages
@@ -180,8 +211,7 @@ def checkuser(request):
         return HttpResponse("<span class='taken'>&nbsp;&#x2718; This username is taken</span>")
     return HttpResponse("<span class='taken'>&nbsp;&#x2718; Invalid request</span>")
 
-
-@loggedin
+@csrf_exempt
 def post_message(request, user):
     if request.method=='POST' and 'recip' in request.POST:
         recip = request.POST['recip']
@@ -195,8 +225,7 @@ def post_message(request, user):
     else:
         raise Http404('POST not used, or recip missing in POST request')
 
-
-@loggedin
+@csrf_exempt
 def erase_message(request, user):
     if 'id' in request.POST:
         msg_id = request.POST['id']
@@ -231,7 +260,6 @@ def login(request):
 def handle_user(request, username, password):
     try:
         member = Member.objects.get(username=username)
-        print(str(member))
     except Member.DoesNotExist:
         return JsonResponse({"success":False})
     if member.password == password:

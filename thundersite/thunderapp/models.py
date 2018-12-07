@@ -60,6 +60,15 @@ class Member(User):
         symmetrical=False,
     )
 
+    messages = models.ManyToManyField(
+        to='self',
+        blank=True,
+        symmetrical=False,
+        through='Message',
+        related_name='related_to'
+    )
+
+
     def __str__(self):
         return 'Username: ' + self.username + ' Email:' + self.email + ' Password:' + self.password
 

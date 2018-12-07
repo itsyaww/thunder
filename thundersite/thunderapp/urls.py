@@ -36,7 +36,6 @@ urlpatterns = [
     path('postmessage/', views.post_message, name='postmessage'),
     # Ajax: delete a message
     path('erasemessage/', views.erase_message, name='erasemessage'),
-    path('messages/', views.messages, name='messages'),
 
 
 ]
