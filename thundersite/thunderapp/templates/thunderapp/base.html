@@ -25,7 +25,7 @@
         <ul class="navbar-nav">
             {% if loggedin %}
             <li class="nav-item">
-                <a class="nav-link text-white hvr-underline-from-center" href="#">Messages</a>
+                <a class="nav-link text-white hvr-underline-from-center" href="{{ messages_url }}/messages/">Messages</a>
             </li>
             <li class="nav-item">
                 {% url 'profile' as profile_url %}

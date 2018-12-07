@@ -21,6 +21,7 @@ urlpatterns = [
     path('profile/<int:member_id>/updateprofile/', views.update_profile_details, name='updateprofile'),
     path('profiles/', views.list_of_members, name='profiles'),
     path('profiles/search/', views.search_members, name='searchmembers'),
+    path('profiles/searchgender/', views.search_gender, name='search_gender'),
 
     path('profile/', views.profile, name='profile'),
     #Profile
