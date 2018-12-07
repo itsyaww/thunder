@@ -99,7 +99,7 @@ def matchlist(request, user):
 
 
 def messages(request):
-    context = { 'appname': appname }
+    context = { 'appname': appname,  'loggedin': True }
     return render(request,'thunderapp/messages.html',context)
 
 
@@ -315,22 +315,38 @@ def list_of_members(request,user):
 
     context = {'members': members, 'loggedin': True}
     return render(request, 'thunderapp/listofmembers.html',context)
-
 @loggedin
 def search_members(request,user):
     if request.method == "GET":
         search = request.GET['search_members']
+        gender = request.GET['filter_gender']
     else:
         search = ''
+        gender = ''
 
     name = search
-    if search == "":
+    if gender =='':
         members = Member.objects.all()
         return render(request, 'thunderapp/searchmembers.html', {'members': members,'loggedin': True})
 
-    members = Member.objects.filter(firstName__contains= name)
+    members = Member.objects.filter(firstName__contains= name).filter(gender__contains= gender)
 
     return render(request, 'thunderapp/searchmembers.html', {'members': members,'loggedin': True})
 
 
+
+
+@loggedin
+def search_gender(request,user):
+    if "filter_by_gender" in request.GET:
+        gender = request.GET.get('filter_by_gender')
+        if gender =='':
+            members = Member.objects.all()
+            return render(request, 'thunderapp/searchmembers.html', {'members': members,'loggedin': True})
+    else:
+        gender = ''
+
+
+    members = Member.objects.filter(gender = gender)
+    return render(request, 'thunderapp/searchmembers.html', {'members': members,'loggedin': True})
 

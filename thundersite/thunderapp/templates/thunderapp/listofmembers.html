@@ -12,11 +12,18 @@
                 <div class="bordercontainer" >
                     <img id='img' class="img-fluid" alt="Not found"  height=100 width="1500" src="{% static '/border.png' %}">
 
-                    <div class="centered">Suggested profiles to follow:</div>
+                    <div class="centered">Suggested matches:</div>
                     <br>
                 </div>
                 <div class="bordercontainer text-white bg-dark">
                 <input type="text" id="search" name="search" placeholder="Filter Members"/>
+                    <span>
+
+                             <input type="radio" id="genderBtn1" name="genderBtn" value=''> All
+                        <input type="radio" id="genderBtn2" name="genderBtn" value="Male"> Male
+                    <input type="radio" id="genderBtn3" name="genderBtn" value="Female"> Female
+
+                    </span>
                 </div>
                 <br>
 <br>
@@ -39,7 +46,7 @@
         top: 50%;
         left: 50%;
         transform: translate(-50%, -50%);
-        font-size: 40px;
+        font-size: 25px;
         text-align: center;
     }
     .profileImage{
