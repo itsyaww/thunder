@@ -1,13 +1,8 @@
 {% extends "thunderapp/base.html" %}
 {% load staticfiles %}
-
 {% block content %}
 {% block alert %}
-
-
 {% include "thunderapp/alerts.html" %}
-
-
 {% endblock %}
 
 <style>
@@ -34,28 +29,28 @@
                     <div class="form-row">
                         <div class="form-group col-md-6">
                             <label for="regfirstname" class="text-white bg-dark">First Name</label>
-                            <input type="text" class="form-control" placeholder="First name" id="regfirstname">
+                            <input type="text" class="form-control" placeholder="First name" id="regfirstname" required>
                         </div>
                         <div class="form-group col-md-6">
                             <label for="reglastname" class="text-white bg-dark">Last Name</label>
-                            <input type="text" class="form-control" placeholder="Last name" id="reglastname">
+                            <input type="text" class="form-control" placeholder="Last name" id="reglastname" required>
                         </div>
                     </div>
                     <div class="form-row">
                         <div class="form-group col-md-6">
                             <label for="regusername" class="text-white bg-dark">Username</label>
-                            <input type="text" class="form-control" maxlength="16" placeholder="Username" id="regusername">
+                            <input type="text" class="form-control" maxlength="16" placeholder="Username" id="regusername" required>
                         </div>
                         <div class="form-group col-md-6">
                             <label for="regpassword" class="text-white bg-dark">Password</label>
-                            <input type="password" class="form-control" maxlength="16" placeholder="Password" id="regpassword">
+                            <input type="password" class="form-control" maxlength="16" placeholder="Password" id="regpassword" required>
                         </div>
                     </div>
 
                     <div class="form-row">
                         <div class="form-group col-md-6">
                             <label for="reggender" class="text-white bg-dark">Gender</label>
-                            <select name="Gender" id="reggender"class="form-control">
+                            <select name="Gender" id="reggender"class="form-control" required>
                                 <option value="Male">Male</option>
                                 <option value="Female">Female</option>
                                 <option value="Other">Other</option>
@@ -63,19 +58,19 @@
                         </div>
                         <div class="form-group col-md-6">
                             <label for="regbday" class="text-white bg-dark">Date Of Birth</label>
-                            <input type="date" class="form-control" id="regbday">
+                            <input type="date" class="form-control" id="regbday" required>
                         </div>
                     </div>
                     <div class="form-group">
                         <label for="regEmail" class="text-white bg-dark">Email</label>
-                        <input type="text" class="form-control" id="regEmail" placeholder="Email">
+                        <input type="text" class="form-control" id="regEmail" placeholder="Email" required>
 
                     </div>
                     <div class="form-group ">
                         <label  class="text-white bg-dark" for="reghobby">Hobbies</label>
                         <select  id="reghobby" name="hobbies" multiple="multiple">
-                            {% for key, value in Hobby.HOBBY_CHOICES %}
-                            <option value="{{key}}">{{value}}</option>
+                            {% for value in hobby%}
+                            <option value="{{value.hobby}}">{{value.hobby}}</option>
                             {% endfor %}
                         </select>
                     </div>
@@ -87,7 +82,5 @@
         </div>
     </section>
 </div>
-
-
 
 {% endblock %}

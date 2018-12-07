@@ -4,31 +4,7 @@ from django.contrib.auth.models import User
 
 class Hobby(models.Model):
 
-    GYM = 'GYM'
-    DANCE = 'DNC'
-    SKI = 'SKI'
-    FILM = 'FLM'
-    KORF = 'KRF'
-    SWIM = 'SWM'
-    PHOTO = 'PHT'
-    TENN = 'TNS'
-    CHES = 'CHESS'
-    DEBT = 'Debating'
-
-    HOBBY_CHOICES = (
-        (GYM, 'Weightlifting'),
-        (DANCE, 'Dancing'),
-        (SKI, 'Skiing'),
-        (FILM, 'Film'),
-        (KORF, 'Korfball'),
-        (SWIM, 'Swimming'),
-        (PHOTO, 'Photography'),
-        (TENN, 'Tennis'),
-        (CHES, 'Chess'),
-        (DEBT, 'Debating')
-    )
-
-    hobby = models.CharField(max_length=20, choices=HOBBY_CHOICES)
+    hobby = models.CharField(max_length=20)
 
     def __str__(self):
         return 'Hobby: ' + self.hobby
