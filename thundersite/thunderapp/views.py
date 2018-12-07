@@ -46,28 +46,23 @@ def index(request):
     return render(request,'thunderapp/index.html',context)
 
 
-@csrf_exempt
-def signup(request):
-    context = { 'appname': appname,
-                'Hobby': Hobby
-                }
-    return render(request,'thunderapp/signup.html',context)
-
-
 def get_friend_profile(request,member_id):
     member = get_object_or_404(Member, pk=member_id)
+    hobby = Hobby.objects.all()
     context = {'member': member,
-               'Hobby': Hobby}
+               'Hobby': hobby}
     return render(request, 'thunderapp/profile.html', context)
 
 
 @loggedin
 def profile(request,user):
     member = get_object_or_404(Member, username=user.username)
+    hobby = Hobby.objects.all()
     context = {
         'member':member,
         'appname': appname,
-        'loggedin': True
+        'loggedin': True,
+        'Hobby': hobby
     }
     return render(request, 'thunderapp/profile.html', context)
 
@@ -103,7 +98,7 @@ def messages(request):
     return render(request,'thunderapp/messages.html',context)
 
 
-@csrf_exempt
+
 def register(request):
     if request.method == 'POST':
         u = request.POST.get('username')
@@ -113,22 +108,31 @@ def register(request):
         e = request.POST.get('email')
         fn = request.POST.get('firstname')
         ln = request.POST.get('lastname')
-        #todo add hobby to profile
         hobby = request.POST.getlist('hobby[]')
+        if len(hobby)==0:
+            return JsonResponse({"success":False})
         try:
-
-            if u == "" or p == "" or g == "" or d == "" or e == "" or fn == "" or ln == ""  :
-                return JsonResponse({"success":False})
-
             Member.objects.create(username=u,password=p,gender=g,dateOfBirth=d,email=e,firstName=fn,lastName=ln)
             member = Member.objects.get(username=u)
+            for hobbyVal in hobby:
+                print(hobbyVal)
+                member.hobbies.add(Hobby.objects.get(hobby= hobbyVal))
             mid = member.id
-             # todo add HttpResponseRedirect(reverse('news-year-archive', args=(year,))
-            return JsonResponse({"success":True,"redirect":True,"redirect_url":"http://127.0.0.1:8000/profile/"+str(mid)})
-
+            context = {
+                'appname' : appname,
+                'username' : u
+            }
+            #return HttpResponseRedirect('profile', args=(member.username))
+            #return JsonResponse({"success":True,"redirect":True,"redirect_url":"http://127.0.0.1:8000/profile/"})
         except IntegrityError:
             return JsonResponse({"success":False})
-    return render(request, 'thunderapp/signup.html')
+    else:
+        hobby = Hobby.objects.all()
+        context = {
+            'appname': appname,
+            'hobby': hobby
+            }
+        return render(request, 'thunderapp/signup.html', context)
 
 
 @csrf_exempt
@@ -288,7 +292,9 @@ def update_profile_details(request,member_id):
             lname = put.get('updatelastname')
             gender = put.get('updategender')
             email = put.get('updateemail')
-            hobby = put.getlist('updatehobby')
+            hobby = put.getlist('updatehobby[]')
+            if len(hobby)==0:
+                return JsonResponse({"success":False})
             if fname == "":
                 return JsonResponse({"success":False})
 
@@ -301,6 +307,9 @@ def update_profile_details(request,member_id):
             m.lastName = lname
             m.gender = gender
             m.email = email
+            for hobbyVal in hobby:
+                print(hobbyVal)
+                m.hobbies.add(Hobby.objects.get(hobby= hobbyVal))
 
             m.save()
 

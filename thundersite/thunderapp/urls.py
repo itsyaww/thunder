@@ -13,17 +13,20 @@ urlpatterns = [
     # logout page
     path('logout/', views.logout, name='logout'),
     #Signup Page
-    path('signup/', views.signup, name='signup'),
+    path('signup/', views.register, name='register'),
     #Register
     path('register/', views.register, name='register'),
     #Upload Image
     path('profile/<int:member_id>/uploadimage/', views.upload_image, name='register'),
+    #Update Profiles
     path('profile/<int:member_id>/updateprofile/', views.update_profile_details, name='updateprofile'),
+    #View list of profiles
     path('profiles/', views.list_of_members, name='profiles'),
+    #Search profiles
     path('profiles/search/', views.search_members, name='searchmembers'),
-
+    #User profile
     path('profile/', views.profile, name='profile'),
-    #Profile
+    #Profile of a friend
     path('profile/<int:member_id>', views.get_friend_profile, name='friendprofile'),
     #Display list of people with common hobbies
     path('matchlist/', views.matchlist, name='matchlist'),
