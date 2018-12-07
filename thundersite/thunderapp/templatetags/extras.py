@@ -1,8 +1,9 @@
 from django import template
 from django.urls import reverse
 from datetime import datetime
+from django.contrib.auth.models import User
 
-def display_message(message, username):
+def display_message(message, user, username):
     url = reverse('messages')
     time = str(message.time)[:16] + ' '
     # str(message.time.date()) + str(message.time.hour) + ':' + str(message.time.minute)
