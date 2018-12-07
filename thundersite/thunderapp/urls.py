@@ -24,6 +24,7 @@ urlpatterns = [
     path('profiles/', views.list_of_members, name='profiles'),
     #Search profiles
     path('profiles/search/', views.search_members, name='searchmembers'),
+    path('profiles/searchgender/', views.search_gender, name='search_gender'),
     #User profile
     path('profile/', views.profile, name='profile'),
     #Profile of a friend
