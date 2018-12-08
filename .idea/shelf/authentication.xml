@@ -1,9 +1,0 @@
-<changelist name="authentication" date="1542880868231" recycled="false">
-  <option name="PATH" value="$PROJECT_DIR$/.idea/shelf/authentication/shelved.patch" />
-  <option name="DESCRIPTION" value="authentication" />
-  <binary>
-    <option name="BEFORE_PATH" value="thundersite/db.sqlite3" />
-    <option name="AFTER_PATH" value="thundersite/db.sqlite3" />
-    <option name="SHELVED_PATH" value="$PROJECT_DIR$/.idea/shelf/authentication/db.sqlite3" />
-  </binary>
-</changelist>
