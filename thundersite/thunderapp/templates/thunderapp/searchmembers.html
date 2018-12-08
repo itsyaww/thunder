@@ -4,7 +4,6 @@
 
 <div id="results" class=" bordercontainer" >
     <ol>
-        {% if members.count > 0 %}
 
         {% for m in members %}
         <br>
@@ -33,22 +32,21 @@
             <input type="button" class="btn btn-success btn-lg" value="Add Friend" onClick="this.disabled=true; this.value='Friends';setColor(event)"/>
             <br>                        <br>
 
-<script>
-    function setColor(e) {
-        var target = e.target,
-            count = +target.dataset.count;
+            <script>
+                function setColor(e) {
+                    var target = e.target,
+                        count = +target.dataset.count;
 
-        target.style.backgroundColor = '#ff000e';
-        target.style.borderColor = '#ff000e';
+                    target.style.backgroundColor = '#ff000e';
+                    target.style.borderColor = '#ff000e';
 
-        target.dataset.count = count === 1 ? 0 : 1;
-    }
-</script>
+                    target.dataset.count = count === 1 ? 0 : 1;
+                }
+            </script>
         </div>
 
 
         {% endfor %}
-        {% endif %}
     </ol>
 
 </div>
