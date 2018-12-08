@@ -375,7 +375,6 @@ def search_members(request,user):
 
 
 
-
 @loggedin
 def search_gender(request,user):
     if "filter_by_gender" in request.GET:
