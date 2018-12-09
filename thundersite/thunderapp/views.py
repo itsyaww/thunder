@@ -7,11 +7,6 @@ from thunderapp.models import Member, Message, Hobby
 from django.db import IntegrityError
 import datetime as D
 from django.http import QueryDict
-from django.db.models import Q
-
-
-from django.contrib.auth.models import User
-
 
 from thunderapp.templatetags.extras import display_message
 
