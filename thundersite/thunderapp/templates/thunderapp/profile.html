@@ -52,6 +52,7 @@
                 <br>
 
                 <div class="bordercontainer">
+                    {% if loggedin %}
 
                     <label id="profilePicture" for="regprofileimage{{member.id}}"  data-toggle="tooltip" title="Upload Profile Image">
 
@@ -64,6 +65,20 @@
 
                         {% endif %}
                     </label>
+                    {% else %}
+                    <label id="profilePicture" data-toggle="tooltip" title="Upload Profile Image">
+
+                        {% if member.profileImage %}
+                        <img id='profile-img' class="rounded-circle img-fluid profileImage" alt="Not found" onerror="this.src='{{STATIC_URL}}/static/image-not-found.png'" height=150 src='{{ member.profileImage.url }}'>
+
+                        {% else %}
+
+                        <img id='profile-img' class="rounded-circle img-fluid profileImage" alt="Not found" height=150 src="{% static '/profile-image.jpg' %}">
+
+                        {% endif %}
+                    </label>
+                    {% endif %}
+
                 </div>
 
 <div>
