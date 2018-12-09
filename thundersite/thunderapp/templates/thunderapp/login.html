@@ -22,20 +22,33 @@
     <section class="container w3-animate-left carousel-fade">
         <div class="container-page">
             <div class='main-login main-centre'>
-<div class="input-group">
+<div class="input-group text-white" >
+
        {% if loggedin %}
            {% url 'profile' as profile_url%}
-            @<h1 class="h3 mb-3 font-weight-normal">
-                You are logged in.
-                Please <a href="{{ profile_url }}/profile/">click here</a> to continue.
+            <h1 class="h3 mb-3 font-weight-normal arrow bounce">
+                <a href="{{ profile_url }}/profile/">You are logged in.
+                    Please click here to continue.</a>
             </h1>
+
+    <section class="container arrow bounce">
+        <a href="{{ profile_url }}/profile/">
+            {% if member.profileImage %}
+            <img id='pi' class="rounded-circle img-fluid profileImage" alt="Not found" onerror="this.src='{{STATIC_URL}}/static/image-not-found.png'" height=150 src='{{ member.profileImage.url }}'>
+
+            {% else %}
+
+            <img id='pi' class="rounded-circle img-fluid profileImage" alt="Not found" height=150 src="{% static '/profile-image.jpg' %}">
+
+            {% endif %}        </a>
+    </section>
             <br><br>
        {% else %}
     <section class="container">
 
                         <img class="mb-4 rounded-circle w3-center w3-animate-left carousel-fade" src="{%  static 'thunderlogo.jpg' %}" alt="" width="240" height="240">
     </section>
-
+    <div>
            <form class="form-signin w3-center w3-animate-left carousel-fade" id="usersignin" pb-autologin="true" autocomplete="off" method='POST'>
                {% csrf_token %}
                <h1 class="h3 mb-3 font-weight-normal text-white bg-dark">Please enter your details to login</h1>
@@ -43,10 +56,13 @@
                <input type="text" id="inputUserName" name='username' maxlength="50" class="form-control" placeholder="UserName" required="" autofocus="" pb-role="username">
                <label for="inputPassword" class="sr-only">Password</label>
                <input type="password" id="inputPassword" class="form-control"  name='password' placeholder="Password" required="" pb-role="password">
-               <button class="btn btn-lg btn-primary btn-block arrow bounce" type="submit" pb-role="submit">Log in</button>
+               <br/><br/>
            </form>
-       {% endif %}
 
+    <button class="btn btn-lg btn-primary btn-block arrow bounce"  onclick="loginUser()">Log in</button>
+        {% endif %}
+
+    </div>
 </div>
 
             </div>
@@ -114,6 +130,7 @@
 
 </style>
 <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+<script type="text/javascript" src="{% static 'login.js' %}"></script>
 
 
 

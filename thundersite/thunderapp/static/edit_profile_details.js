@@ -8,7 +8,6 @@ function updateProfile(mID) {
             'updatefirstname':$('#profilefirstname').val(),
             'updatelastname':$('#profilelastname').val(),
             'updategender':$('#profilegender').val(),
-            'updateemail':$('#profileemail').val(),
             'updatehobby':$('#profilehobby').val(),
             'csrfmiddlewaretoken':$("input[name=csrfmiddlewaretoken]").val()
 

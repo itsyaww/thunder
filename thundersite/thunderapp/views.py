@@ -7,6 +7,13 @@ from thunderapp.models import Member, Message, Hobby
 from django.db import IntegrityError
 import datetime as D
 from django.http import QueryDict
+from django.db.models import Q
+
+from django.core import serializers
+from datetime import datetime
+
+from django.contrib.auth.models import User
+
 
 from thunderapp.templatetags.extras import display_message
 
@@ -138,21 +145,31 @@ def register(request):
         hobby = request.POST.getlist('hobby[]')
         if len(hobby)==0:
             return JsonResponse({"success":False})
+
+        b_date = datetime.strptime(d, '%Y-%m-%d')
+
+        age = ((datetime.today() - b_date).days/365)
+
+        if age < 18 or age  > 100:
+            return JsonResponse({"success":False,"ageError":True})
+
+
+
         try:
             Member.objects.create(username=u,password=p,gender=g,dateOfBirth=d,email=e,firstName=fn,lastName=ln)
             member = Member.objects.get(username=u)
             for hobbyVal in hobby:
                 print(hobbyVal)
-                member.hobbies.add(Hobby.objects.get(hobby= hobbyVal))
-            mid = member.id
+                hob = Hobby.objects.filter(hobby=hobbyVal)
+                member.hobbies.add(hob[0])
             context = {
                 'appname' : appname,
                 'username' : u
             }
             #return HttpResponseRedirect('profile', args=(member.username))
-            #return JsonResponse({"success":True,"redirect":True,"redirect_url":"http://127.0.0.1:8000/profile/"})
+            return JsonResponse({"success":True})
         except IntegrityError:
-            return JsonResponse({"success":False})
+            return JsonResponse({"success":False,"usernameError":True})
     else:
         hobby = Hobby.objects.all()
         context = {
@@ -242,51 +259,6 @@ def erase_message(request, user):
     else:
         raise Http404('Missing id in POST')
 
-@csrf_exempt
-def login(request):
-    if 'username' in request.POST and 'password' in request.POST:
-        print("Post login request")
-        username = request.POST['username']
-        password = request.POST['password']
-        return handle_user(request, username,password)
-    elif request.session.get('username'):
-        print("Session login request")
-        username = request.session.get('username')
-        password = request.session.get('password')
-        return handle_user(request,username,password)
-    else:
-        context = {'appname': appname}
-        return render(request, 'thunderapp/login.html', context)
-
-
-def handle_user(request, username, password):
-    try:
-        member = Member.objects.get(username=username)
-    except Member.DoesNotExist:
-        return JsonResponse({"success":False})
-    if member.password == password:
-        # remember user in session variable
-        request.session['username'] = username
-        request.session['password'] = password
-        context = {
-            'appname': appname,
-            'username': username,
-            'member': member,
-            'loggedin': True
-        }
-        response = render(request, 'thunderapp/login.html', context)
-        # remember last login in cookie
-        now = D.datetime.utcnow()
-        max_age = 365 * 24 * 60 * 60  # one year
-        delta = now + D.timedelta(seconds=max_age)
-        format = "%a, %d-%b-%Y %H:%M:%S GMT"
-        expires = D.datetime.strftime(delta, format)
-        response.set_cookie('last_login', now, expires=expires)
-        return response
-    else:
-        print("Password Error")
-        return JsonResponse({"success":False})
-
 def sortByHobbies(currentMember, membersQuerySet):
     members = []
 
@@ -304,7 +276,6 @@ def sortByHobbies(currentMember, membersQuerySet):
     insertionSort(members, matchRank)
 
     return members
-
 
 def insertionSort(matchList, matchRank):
     for i in range(len(matchList)):
@@ -335,7 +306,6 @@ def update_profile_details(request,member_id):
             fname = put.get('updatefirstname')
             lname = put.get('updatelastname')
             gender = put.get('updategender')
-            email = put.get('updateemail')
             hobby = put.getlist('updatehobby[]')
             if len(hobby)==0:
                 return JsonResponse({"success":False})
@@ -344,16 +314,14 @@ def update_profile_details(request,member_id):
 
             if lname == "":
                 return JsonResponse({"success":False})
-            if email == "":
-                return JsonResponse({"success":False})
 
             m.firstName = fname
             m.lastName = lname
             m.gender = gender
-            m.email = email
             for hobbyVal in hobby:
                 print(hobbyVal)
-                m.hobbies.add(Hobby.objects.get(hobby= hobbyVal))
+                hob = Hobby.objects.filter(hobby=hobbyVal)
+                m.hobbies.add(hob[0])
 
             m.save()
 
@@ -408,3 +376,51 @@ def search_gender(request,user):
     members = sortByHobbies(currentMember, membersQuerySet)
     return render(request, 'thunderapp/searchmembers.html', {'members': members,'loggedin': True})
 
+@csrf_exempt
+def loginUser(request):
+    if 'username' in request.POST and 'password' in request.POST:
+        username = request.POST['username']
+        password = request.POST['password']
+        return checkUser(request,username,password)
+
+    elif request.session.get('username'):
+        username = request.session.get('username')
+        password = request.session.get('password')
+        return checkUser(request,username,password)
+    else:
+        context = {'appname': appname}
+        return render(request, 'thunderapp/login.html', {})
+
+def checkUser(request,username,password):
+
+    try:
+        member = Member.objects.get(username=username)
+        if member.password != password:
+            return JsonResponse({"success":False})
+    except Member.DoesNotExist:
+        return JsonResponse({"success":False})
+    if member.password == password:
+
+        context = {
+            "success":True,
+            'appname': appname,
+            'username': username,
+            'member': member,
+            'loggedin': True
+        }
+        request.session['username'] = username
+        request.session['password'] = password
+        response = render(request, 'thunderapp/login.html',context)
+        # response = JsonResponse({"success":True,"redirect":True,"redirect_url":"http://127.0.0.1:8000/profile/",
+        #                          "appname":appname,"username":username,"loggedin":True, "member":serialized_obj})
+        # remember last login in cookie
+        now = D.datetime.utcnow()
+        max_age = 365 * 24 * 60 * 60  # one year
+        delta = now + D.timedelta(seconds=max_age)
+        format = "%a, %d-%b-%Y %H:%M:%S GMT"
+        expires = D.datetime.strftime(delta, format)
+        response.set_cookie('last_login', now, expires=expires)
+        return response
+
+
+    return HttpResponse()

@@ -7,9 +7,7 @@ from django.contrib.auth import views as auth_views
 app_name = 'thunderapp'
 urlpatterns = [
     #Default page
-    path('', views.login, name='index'),
-    #Login page
-    path('login/', views.login, name='login'),
+    path('', views.loginUser, name='index'),
     # logout page
     path('logout/', views.logout, name='logout'),
     #Signup Page
@@ -39,6 +37,8 @@ urlpatterns = [
     path('postmessage/', views.post_message, name='postmessage'),
     # Ajax: delete a message
     path('erasemessage/', views.erase_message, name='erasemessage'),
+
+    path('login/', views.loginUser, name='login'),
 
 
 ]
