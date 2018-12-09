@@ -7,11 +7,6 @@ from thunderapp.models import Member, Message, Hobby
 from django.db import IntegrityError
 import datetime as D
 from django.http import QueryDict
-from django.db.models import Q
-
-
-from django.contrib.auth.models import User
-
 
 from thunderapp.templatetags.extras import display_message
 
@@ -292,6 +287,24 @@ def handle_user(request, username, password):
         print("Password Error")
         return JsonResponse({"success":False})
 
+def sortByHobbies(currentMember, membersQuerySet):
+    members = []
+
+    for member in membersQuerySet.all():
+        members.append(member)
+
+    matchRank = []
+
+    for member in members:
+        count = 0
+        for hobby in currentMember.hobbies.all():
+            if hobby in member.hobbies.all():
+                count += 1
+        matchRank.append(count)
+    insertionSort(members, matchRank)
+
+    return members
+
 
 def insertionSort(matchList, matchRank):
     for i in range(len(matchList)):
@@ -351,25 +364,28 @@ def update_profile_details(request,member_id):
 
 @loggedin
 def list_of_members(request,user):
-    members = Member.objects.all()
+    currentMember = get_object_or_404(Member, username=user.username)
+    membersQuerySet = Member.objects.exclude(following__pk=user.pk).exclude(pk=user.pk)
+    members = sortByHobbies(currentMember, membersQuerySet)
 
     context = {'members': members, 'loggedin': True}
     return render(request, 'thunderapp/listofmembers.html',context)
+
 @loggedin
 def search_members(request,user):
     if request.method == "GET":
-        search = request.GET['search_members']
-        gender = request.GET['filter_gender']
+        search = request.GET.get('search_members')
+        gender = request.GET.get('filter_gender')
     else:
         search = ''
         gender = ''
 
     name = search
     if gender =='':
-        members = Member.objects.all()
+        members = Member.objects.filter(firstName__contains= name)
         return render(request, 'thunderapp/searchmembers.html', {'members': members,'loggedin': True})
 
-    members = Member.objects.filter(firstName__contains= name).filter(gender__contains= gender)
+    members = Member.objects.filter(firstName_contains= name).filter(gender_contains= gender)
 
     return render(request, 'thunderapp/searchmembers.html', {'members': members,'loggedin': True})
 
@@ -377,15 +393,18 @@ def search_members(request,user):
 
 @loggedin
 def search_gender(request,user):
+    currentMember = get_object_or_404(Member, pk=user.pk)
     if "filter_by_gender" in request.GET:
         gender = request.GET.get('filter_by_gender')
         if gender =='':
-            members = Member.objects.all()
+            membersQuerySet = Member.objects.all().exclude(following__pk=user.pk).exclude(pk=user.pk)
+            members = sortByHobbies(currentMember, membersQuerySet)
             return render(request, 'thunderapp/searchmembers.html', {'members': members,'loggedin': True})
     else:
         gender = ''
 
+    membersQuerySet = Member.objects.filter(gender=gender).exclude(following__pk=user.pk).exclude(pk=user.pk)
 
-    members = Member.objects.filter(gender = gender)
+    members = sortByHobbies(currentMember, membersQuerySet)
     return render(request, 'thunderapp/searchmembers.html', {'members': members,'loggedin': True})
 
