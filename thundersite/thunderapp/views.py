@@ -191,7 +191,6 @@ def upload_image(request,member_id):
         return JsonResponse({"success":False})
     return JsonResponse({"success":True})
 
-
 @loggedin
 def friends(request,user):
     # # list of people user is following
@@ -329,6 +328,23 @@ def update_profile_details(request,member_id):
             return JsonResponse({"success":False})
 
     return JsonResponse({"success":True})
+
+
+@csrf_exempt
+def followMember(request):
+    if request.method == "PUT":
+        try:
+            put = QueryDict(request.body)
+            member_id = put.get('mID')
+            newFriend = Member.objects.get(pk=member_id)
+
+            currentUser = Member.objects.get(username=User.username)
+            currentUser.following.add(newFriend)
+            currentUser.save()
+        except Member.DoesNotExist:
+            return JsonResponse({"success": False})
+
+    return JsonResponse({"success": True})
 
 @loggedin
 def list_of_members(request,user):

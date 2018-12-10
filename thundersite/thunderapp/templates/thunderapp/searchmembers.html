@@ -29,7 +29,7 @@
             <br>
             <div>Date Of Birth: {{m.dateOfBirth}}</div>
             <br>
-            <input type="button" class="btn btn-success btn-lg" value="Follow" onClick="this.disabled=true; this.value='Friends'; setColor(event)"/>
+            <input type="button" class="btn btn-success btn-lg" value="Follow" onClick="this.disabled=true; this.value='Friends'; setColor(event); followMember('{{ m.id }}')"/>
             <br>                        <br>
 
             <script>
