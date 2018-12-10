@@ -8,11 +8,16 @@ function followMember(mID) {
         },
         success: function(response) {
             if (response.success) {
-                $("#successAlert").show();
-                $("#successAlert").delay(500).addClass("in").fadeOut(2000);
+                $("#followMembersuccessAlert").show();
+                $("#followMembersuccessAlert").delay(1200).addClass("in").fadeOut(2000);
+
+                setTimeout(function () {
+                    $('#results').load(location.href + " #results");
+                }, 1200);
+
             }else{
-                $("#errorAlert").show();
-                $("#errorAlert").delay(1500).addClass("in").fadeOut(2000);
+                $("#followMembererrorAlert").show();
+                $("#followMembererrorAlert").delay(1500).addClass("in").fadeOut(2000);
             }
 
         }

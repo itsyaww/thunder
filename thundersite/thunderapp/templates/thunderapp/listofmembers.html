@@ -3,6 +3,9 @@
 {% load staticfiles %}
 
 {% block content %}
+{% block alert %}
+{% include "thunderapp/alerts.html" %}
+{% endblock %}
 <div class="container-fluid w3-animate-left carousel-fade" >
     <section class="container">
         <div class="container-page">
@@ -26,7 +29,7 @@
                 </div>
                 <br>
 <br>
-                {% block alert %}
+                {% block search %}
                 {% include "thunderapp/searchmembers.html" %}
                 {% endblock %}
             </div>
