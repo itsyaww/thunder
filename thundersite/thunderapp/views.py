@@ -206,7 +206,7 @@ def friends(request,user):
     #     'followers': followers,
     #     'loggedin': True
     # }
-    return render(request, 'thunderapp/friends.html', context)
+    return render(request, 'thunderapp/friendsfriends.html', context)
 
 
 # view function that responses to Ajax requests on login/register pages
