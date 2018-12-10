@@ -1,4 +1,4 @@
-function followMember(event, mID) {
+function followMember(mID) {
     $.ajax({
         type: "PUT",
         url:'/profiles/followMember/',
