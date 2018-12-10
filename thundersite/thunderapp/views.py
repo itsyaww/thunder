@@ -258,12 +258,7 @@ def erase_message(request, user):
     else:
         raise Http404('Missing id in POST')
 
-def sortByHobbies(currentMember, membersQuerySet):
-    members = []
-
-    for member in membersQuerySet.all():
-        members.append(member)
-
+def sortByHobbies(currentMember, members):
     matchRank = []
 
     for member in members:
@@ -349,14 +344,27 @@ def followMember(request):
 @loggedin
 def list_of_members(request,user):
     currentMember = get_object_or_404(Member, username=user.username)
-    membersQuerySet = Member.objects.exclude(following__pk=user.pk).exclude(pk=user.pk)
-    members = sortByHobbies(currentMember, membersQuerySet)
+    following = user.following.all()
+    membersQuerySet = Member.objects.exclude(pk=user.pk)
+
+    members = []
+
+    for member in membersQuerySet.all():
+        members.append(member)
+
+    for member in members:
+         if member in following:
+             members.remove(member)
+
+    members = sortByHobbies(currentMember, members)
 
     context = {'members': members, 'loggedin': True}
     return render(request, 'thunderapp/listofmembers.html',context)
 
 @loggedin
 def search_members(request,user):
+    currentMember = get_object_or_404(Member, pk=user.pk)
+    following = user.following.all()
     if request.method == "GET":
         search = request.GET.get('search_members')
         gender = request.GET.get('filter_gender')
@@ -366,11 +374,31 @@ def search_members(request,user):
 
     name = search
     if gender =='':
-        members = Member.objects.filter(firstName__contains= name)
+        membersQuerySet = Member.objects.filter(firstName__contains= name)
+        members = []
+
+        for member in membersQuerySet.all():
+            members.append(member)
+
+        for member in members:
+            if member in following:
+                members.remove(member)
+
+        members = sortByHobbies(currentMember, members)
+
         return render(request, 'thunderapp/searchmembers.html', {'members': members,'loggedin': True})
 
-    members = Member.objects.filter(firstName_contains= name).filter(gender_contains= gender)
+    membersQuerySet = Member.objects.filter(firstName_contains= name).filter(gender_contains= gender)
+    members = []
 
+    for member in membersQuerySet.all():
+        members.append(member)
+
+    for member in members:
+        if member in following:
+            members.remove(member)
+
+    members = sortByHobbies(currentMember, members)
     return render(request, 'thunderapp/searchmembers.html', {'members': members,'loggedin': True})
 
 
@@ -378,18 +406,38 @@ def search_members(request,user):
 @loggedin
 def search_gender(request,user):
     currentMember = get_object_or_404(Member, pk=user.pk)
+    following = user.following.all()
     if "filter_by_gender" in request.GET:
         gender = request.GET.get('filter_by_gender')
         if gender =='':
-            membersQuerySet = Member.objects.all().exclude(following__pk=user.pk).exclude(pk=user.pk)
-            members = sortByHobbies(currentMember, membersQuerySet)
+            membersQuerySet = Member.objects.all().exclude(pk=user.pk)
+
+            members = []
+
+            for member in membersQuerySet.all():
+                members.append(member)
+
+            for member in members:
+                if member in following:
+                    members.remove(member)
+
+            members = sortByHobbies(currentMember, members)
             return render(request, 'thunderapp/searchmembers.html', {'members': members,'loggedin': True})
     else:
         gender = ''
 
-    membersQuerySet = Member.objects.filter(gender=gender).exclude(following__pk=user.pk).exclude(pk=user.pk)
+    membersQuerySet = Member.objects.filter(gender=gender).exclude(pk=user.pk)
 
-    members = sortByHobbies(currentMember, membersQuerySet)
+    members = []
+
+    for member in membersQuerySet.all():
+        members.append(member)
+
+    for member in members:
+         if member in following:
+             members.remove(member)
+
+    members = sortByHobbies(currentMember, members)
     return render(request, 'thunderapp/searchmembers.html', {'members': members,'loggedin': True})
 
 @csrf_exempt
