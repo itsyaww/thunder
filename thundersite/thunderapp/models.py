@@ -12,13 +12,13 @@ class Hobby(models.Model):
 
 class Member(User):
 
-    MALE = 'MALE'
-    FEMALE = 'FEMALE'
-    OTHER = 'GENDER' #Assign tuple keys here because it's best practice
+    MALE = 'Male'
+    FEMALE = 'Female'
+    OTHER = 'Gender' #Assign tuple keys here because it's best practice
 
-    GENDER = ((MALE,'MALE'),
-              (FEMALE,'FEMALE'),
-              (OTHER,'OTHER'))
+    GENDER = ((MALE,'Male'),
+              (FEMALE,'Female'),
+              (OTHER,'Other'))
 
 
     #General Attributes
