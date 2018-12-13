@@ -40,8 +40,11 @@ def logout(request, user):
     return render(request,'thunderapp/index.html', context)
 
 @csrf_exempt
-def home(request):
-    return render(request, 'thunderapp/base.html', {})
+@loggedin
+def home(request, user):
+    member = get_object_or_404(Member, username=user.username)
+
+    return render(request, 'thunderapp/base.html', {'currentmember':member})
 
 
 def index(request):
@@ -61,11 +64,13 @@ def get_friend_profile(request,member_id):
 def profile(request,user):
     member = get_object_or_404(Member, username=user.username)
     hobby = Hobby.objects.all()
+
     context = {
         'member':member,
         'appname': appname,
         'loggedin': True,
-        'Hobby': hobby
+        'Hobby': hobby,
+        'currentmember':member
     }
     return render(request, 'thunderapp/profile.html', context)
 
@@ -92,7 +97,7 @@ def matchlist(request, user):
 
     insertionSort(matches, matchRank)
 
-    context = {'appname': appname, 'currentMember': matches, 'loggedin': True}
+    context = {'appname': appname, 'currentMember': matches, 'loggedin': True, 'currentmember':currentMember}
     return render(request,'thunderapp/matchlist.html', context)
 
 @csrf_exempt
@@ -358,7 +363,7 @@ def list_of_members(request,user):
 
     members = sortByHobbies(currentMember, members)
 
-    context = {'members': members, 'loggedin': True}
+    context = {'members': members, 'loggedin': True, 'currentmember':currentMember}
     return render(request, 'thunderapp/listofmembers.html',context)
 
 @loggedin
