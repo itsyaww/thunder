@@ -12,7 +12,7 @@ function followMember(mID) {
                 $("#followMembersuccessAlert").delay(1200).addClass("in").fadeOut(2000);
 
                 setTimeout(function () {
-                    $('#results').load(location.href + " #results");
+                    window.location = '/profiles/';
                 }, 1200);
 
             }else{
@@ -23,3 +23,4 @@ function followMember(mID) {
         }
     });
 }
+

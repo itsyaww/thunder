@@ -145,6 +145,19 @@
 
                 <span class="text-white bg-dark">Email: <input type="text"  class="form-control" readonly id="profileemail" value="{{member.email}}"></span>
                 <br>
+                <div class="form-group ">
+                    <label for="profilehobby" class="text-white bg-dark">Hobbies</label>
+                    <select  id="profilehobby" name="hobbies" multiple="multiple">
+                        {% for value in Hobby %}
+                        {% if value in member.hobbies.all %}
+                        <option selected value="{{value.hobby}}" disabled>{{value.hobby}}</option>
+                        {% else %}
+                        <option value="{{value.hobby}}" disabled>{{value.hobby}}</option>
+                        {% endif %}
+                        {% endfor %}
+                    </select>
+                </div>
+
                 {% endif %}
 
 

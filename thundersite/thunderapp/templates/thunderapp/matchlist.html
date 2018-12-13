@@ -3,8 +3,26 @@
 
 {% block content %}
 <div id="profile" class="container-fluid w3-animate-left carousel-fade" >
+    <section class="container">
+        <div class="container-page">
+            <div class='main-login main-centre'>
+                <br>
+                <div class="bordercontainer">
+                    <img id='img' class="img-fluid" alt="Not found"  height=100 width="1500" src="{% static '/border.png' %}">
 
-    <h3>Guess who has a match! :)</h3>
+                    <div class="centered">Your Match List</div>
+                    <br>
+
+                </div>
+                <br>
+            </div>
+        </div>
+    </section>
+</div>
+
+
+<div id="profile" class="container-fluid w3-animate-left carousel-fade " >
+
     <section class="container">
         <div class="container-page">
             <div class='main-login main-centre'>
@@ -40,6 +58,22 @@
           counter-increment: section;                 /* Increment the value of section counter by 1 */
           content: counter(section);                  /* Display the value of section counter */
         }
+         .bordercontainer {
+             position: relative;
+             text-align: center;
+             color: white;
+         }
+
+        .centered {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 25px;
+            text-align: center;
+        }
+
+
     </style>
 
             </div>
