@@ -374,7 +374,7 @@ def search_members(request,user):
 
     name = search
     if gender =='':
-        membersQuerySet = Member.objects.filter(firstName__contains= name)
+        membersQuerySet = Member.objects.filter(firstName__contains= name).exclude(pk=user.pk)
         members = []
 
         for member in membersQuerySet.all():
