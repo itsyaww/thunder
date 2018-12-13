@@ -26,7 +26,7 @@
     <section class="container">
         <div class="container-page">
             <div class='main-login main-centre'>
-    <div class="card-columns" >
+    <div class="card-columns w3-animate-bottom" >
         {% for match in currentMember %}
             {% url 'friendprofile' as profile_url %}
             <a href="{{ profile_url }}/profile/{{ match.pk }}">
