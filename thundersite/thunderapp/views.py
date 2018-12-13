@@ -488,3 +488,4 @@ def checkUser(request,username,password):
 
 
     return HttpResponse()
+
