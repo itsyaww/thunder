@@ -15,7 +15,7 @@ from datetime import datetime
 from django.contrib.auth.models import User
 
 
-from thunderapp.templatetags.extras import display_message
+from thunderapp.templatetags.extras import display_message, display_all_messages
 
 appname = "Thunder"
 
@@ -100,41 +100,43 @@ def matchlist(request, user):
     context = {'appname': appname, 'currentMember': matches, 'loggedin': True, 'currentmember':currentMember}
     return render(request,'thunderapp/matchlist.html', context)
 
-@csrf_exempt
+@loggedin
 def messages(request, user):
-    # Whose messages are we viewing?
-    if 'view' in request.GET:
-        view = request.GET['view']
-        try: view_user = Member.objects.get(username=view)
-        except Member.DoesNotExist: raise Http404('Member does not exist')
-        profile = view_user.profile
-        # public messages that 'view_user' has received
-        m1 = Message.objects.filter(recip=view_user,public=True)
-        # public messages that 'view_user' has sent
-        m2 = Message.objects.filter(sender=view_user,public=True)
-        # messages 'user' sent 'view_user'
-        m3 = Message.objects.filter(sender=user,recip=view_user)
-        # messages 'view_user' sent 'user'
-        m4 = Message.objects.filter(sender=view_user,recip=user)
-        # union of the four query sets
-        messages = m1.union(m2,m3,m4).order_by('-time')
-    else:
-        view = user.username
-        profile = user.firstName
-        # all messages I sent
-        m1 = Message.objects.filter(sender=user)
-        # all messages I received
-        m2 = Message.objects.filter(recip=user)
-        # union of the two query sets
-        messages = m1.union(m2).order_by('-time')
+    member = get_object_or_404(Member, username=user.username)
     return render(request, 'thunderapp/messages.html', {
         'appname': appname,
-        'username': user.username,
-        'profile': profile,
-        'view': view,
-        'messages': messages,
+        'member':member,
         'loggedin': True}
                   )
+@loggedin
+def getMessages(request, user):
+    if request.method=='GET' and 'followingUserId' in request.GET:
+        following_user_id = request.GET['followingUserId']
+        try: following_user = Member.objects.get(id=following_user_id)
+        except Member.DoesNotExist: raise Http404('Member does not exist')
+        # messages 'user' sent 'following_user'
+        m1 = Message.objects.filter(sender=user, recip=following_user)
+        # messages 'following_user' sent 'user'
+        m2 = Message.objects.filter(sender=following_user,recip=user)
+        # union of the thw query sets
+        all_messages = m1.union(m2).order_by('time')
+        print(all_messages)
+        return HttpResponse(display_all_messages(all_messages))
+    else:
+        raise Http404('IDs missing in GET request')
+
+@loggedin
+def post_message(request, user):
+    if request.method=='POST' and 'recip' in request.POST:
+        recip = request.POST['recip']
+        try: recip_user = Member.objects.get(id=recip)
+        except Member.DoesNotExist: raise Http404('Member does not exist')
+        text = request.POST['messageText']
+        message = Message(sender=user,recip=recip_user,time=timezone.now(),text=text)
+        message.save()
+        return HttpResponse(display_message(message))
+    else:
+        raise Http404('POST not used, or recip missing in POST request')
 
 @csrf_exempt
 def register(request):
@@ -233,19 +235,6 @@ def checkuser(request):
     return HttpResponse("<span class='taken'>&nbsp;&#x2718; Invalid request</span>")
 
 
-@loggedin
-def post_message(request, user):
-    if request.method=='POST' and 'recip' in request.POST:
-        recip = request.POST['recip']
-        try: recip_user = Member.objects.get(username=recip)
-        except Member.DoesNotExist: raise Http404('Member does not exist')
-        text = request.POST['text']
-        pm = request.POST['pm'] == '0'
-        message = Message(sender=user,recip=recip_user,public=pm,time=timezone.now(),text=text)
-        message.save()
-        return HttpResponse(display_message(message, user.username))
-    else:
-        raise Http404('POST not used, or recip missing in POST request')
 
 
 @loggedin

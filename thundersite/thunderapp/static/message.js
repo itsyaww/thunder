@@ -1,16 +1,15 @@
-$("#msg-form").submit(function(event) {
+$(function() {
+    function postmessage(event) {
     $.ajax({
-        type : $(this).attr('method'),
-        url : $(this).attr('action'),
+        type : "POST",
+        url : "/postmessage/",
         data: {
             'csrfmiddlewaretoken' : $('input[name=csrfmiddlewaretoken]').val(),
             'recip' : $('input[name=recip]').val(),
-            'text' : $('textarea[name=text]').val(),
-            'pm' : $(".pm_class:checked").val(),
+            'messageText' : $('textarea[name=messageContent]').val(),
         },
         success : function(data) {
-            $(data).prependTo("#messages-div").hide().fadeIn(400);
-            $('.remove-btn').click(remove_button);
+            $(data).appendTo("#messages-div").hide().fadeIn(400);
         },
         error: function(jqXHR, textStatus, error) {
             console.log(error);
@@ -18,4 +17,17 @@ $("#msg-form").submit(function(event) {
     });
     // prevent normal submission
     event.preventDefault();
+    };
+    // Execute a function when the user releases a key on the keyboard
+    $("#messageSend").click( function(event) {
+        event.preventDefault();
+        postmessage(event)
+    });
+
+    function getMessage(followingUserId, userId) {
+        alert("following user"+followingUserId)
+        alert(" user"+userId)
+
+    }
+
 });

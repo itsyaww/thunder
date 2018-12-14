@@ -32,6 +32,8 @@ urlpatterns = [
     path('matchlist/', views.matchlist, name='matchlist'),
     # messages page
     path('messages/', views.messages, name='messages'),
+    # getMessages Ajax
+    path('getMessages/', views.getMessages, name='getMessages'),
     # Ajax: check if user exists
     path('checkuser/', views.checkuser, name='checkuser'),
     # Ajax: post a new message
