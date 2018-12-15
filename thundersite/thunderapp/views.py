@@ -252,7 +252,12 @@ def erase_message(request, user):
     else:
         raise Http404('Missing id in POST')
 
-def sortByHobbies(currentMember, members):
+def sortByHobbies(currentMember, membersQuerySet):
+    members = []
+
+    for member in membersQuerySet.all():
+        members.append(member)
+
     matchRank = []
 
     for member in members:
@@ -339,18 +344,9 @@ def followMember(request, user):
 def list_of_members(request,user):
     currentMember = get_object_or_404(Member, username=user.username)
     following = user.following.all()
-    membersQuerySet = Member.objects.exclude(pk=user.pk)
+    membersQuerySet = Member.objects.exclude(pk=user.pk).exclude(pk__in=following)
 
-    members = []
-
-    for member in membersQuerySet.all():
-        members.append(member)
-
-    for member in members:
-         if member in following:
-             members.remove(member)
-
-    members = sortByHobbies(currentMember, members)
+    members = sortByHobbies(currentMember, membersQuerySet)
 
     context = {'members': members, 'loggedin': True, 'currentmember':currentMember}
     return render(request, 'thunderapp/listofmembers.html',context)
@@ -368,31 +364,15 @@ def search_members(request,user):
 
     name = search
     if gender =='':
-        membersQuerySet = Member.objects.filter(firstName__contains= name).exclude(pk=user.pk)
-        members = []
+        membersQuerySet = Member.objects.filter(firstName__contains= name).exclude(pk=user.pk).exclude(pk__in=following)
 
-        for member in membersQuerySet.all():
-            members.append(member)
-
-        for member in members:
-            if member in following:
-                members.remove(member)
-
-        members = sortByHobbies(currentMember, members)
+        members = sortByHobbies(currentMember, membersQuerySet)
 
         return render(request, 'thunderapp/searchmembers.html', {'members': members,'loggedin': True})
 
-    membersQuerySet = Member.objects.filter(firstName_contains= name).filter(gender_contains= gender)
-    members = []
+    membersQuerySet = Member.objects.filter(firstName_contains= name).filter(gender_contains= gender).exclude(pk__in=following)
 
-    for member in membersQuerySet.all():
-        members.append(member)
-
-    for member in members:
-        if member in following:
-            members.remove(member)
-
-    members = sortByHobbies(currentMember, members)
+    members = sortByHobbies(currentMember, membersQuerySet)
     return render(request, 'thunderapp/searchmembers.html', {'members': members,'loggedin': True})
 
 
@@ -404,34 +384,16 @@ def search_gender(request,user):
     if "filter_by_gender" in request.GET:
         gender = request.GET.get('filter_by_gender')
         if gender =='':
-            membersQuerySet = Member.objects.all().exclude(pk=user.pk)
+            membersQuerySet = Member.objects.all().exclude(pk=user.pk).exclude(pk__in=following)
 
-            members = []
-
-            for member in membersQuerySet.all():
-                members.append(member)
-
-            for member in members:
-                if member in following:
-                    members.remove(member)
-
-            members = sortByHobbies(currentMember, members)
+            members = sortByHobbies(currentMember, membersQuerySet)
             return render(request, 'thunderapp/searchmembers.html', {'members': members,'loggedin': True})
     else:
         gender = ''
 
-    membersQuerySet = Member.objects.filter(gender=gender).exclude(pk=user.pk)
+    membersQuerySet = Member.objects.filter(gender=gender).exclude(pk=user.pk).exclude(pk__in=following)
 
-    members = []
-
-    for member in membersQuerySet.all():
-        members.append(member)
-
-    for member in members:
-         if member in following:
-             members.remove(member)
-
-    members = sortByHobbies(currentMember, members)
+    members = sortByHobbies(currentMember, membersQuerySet)
     return render(request, 'thunderapp/searchmembers.html', {'members': members,'loggedin': True})
 
 @csrf_exempt
