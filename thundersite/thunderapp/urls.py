@@ -42,6 +42,7 @@ urlpatterns = [
     path('erasemessage/', views.erase_message, name='erasemessage'),
 
     path('login/', views.loginUser, name='login'),
+    path('profile/friend/', views.friend, name='friendInfo'),
 
 
 ]

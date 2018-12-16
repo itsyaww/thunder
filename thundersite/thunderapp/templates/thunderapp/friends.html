@@ -1,3 +1,46 @@
-{% extends "thunderapp/base.html" %}
-{% block content %}
+{% block info %}
+<style>
+
+
+</style>
+<div id="profileinfo" class="modal " style="display:none">
+    <div class="modal-dialog">
+
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 id="friendUsername" class="modal-title"></h4>
+         </div>
+            <div class="modal-body">
+                <img id="friendImg" src="" height="80">
+                <div>
+                    <div>
+                        <br/>
+                    <span>Name: </span> <span id="friendName"></span>
+                        </div>
+                    <br>
+
+                    <span>Gender: </span><span id="friendGender"></span>
+                    <div>
+                        <br>
+
+                        <span>Date Of Birth: </span><span id="friendDOB"></span>
+                    </div>                    <br>
+
+
+                    <div id="friendHobby"></div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button id="messageUser" type="button" class="btn btn-default" data-dismiss="modal">Message</button>
+
+                <button id="closefriendInfo" type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+
+    </div>
+</div>
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
 {% endblock %}
