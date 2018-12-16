@@ -198,23 +198,6 @@ def upload_image(request,member_id):
         return JsonResponse({"success":False})
     return JsonResponse({"success":True})
 
-@loggedin
-def friends(request,user):
-    # # list of people user is following
-    # following = user.following.all()
-    # # list of people that are following me
-    # followers = Member.objects.filter(following__username=user.username)
-    # # render reponse
-    # context = {
-    #     'appname': appname,
-    #     'username': user.username,
-    #     'members': members,
-    #     'following': following,
-    #     'followers': followers,
-    #     'loggedin': True
-    # }
-    return render(request, 'thunderapp/friendsfriends.html', context)
-
 
 # view function that responses to Ajax requests on login/register pages
 
@@ -444,4 +427,26 @@ def checkUser(request,username,password):
 
 
     return HttpResponse()
+
+
+def friend(request):
+    friendid = request.GET['friendID']
+    friendinfo = Member.objects.get(pk=friendid)
+    user = friendinfo.username
+    fname = friendinfo.firstName
+    lName = friendinfo.lastName
+    name = fname + " " + lName
+    image = "/media/"+str(friendinfo.profileImage)
+    dob = str(friendinfo.dateOfBirth)
+    gender = friendinfo.gender
+    hobbies = Hobby.objects.all()
+    h = []
+    for hobby in hobbies:
+        if Member.objects.filter(hobbies=hobby).filter(pk=friendid):
+            h.append(str(hobby))
+
+
+
+    return JsonResponse({"success":True, "username":user, "name":name, "image":image, "DOB":dob, "gender":gender,
+                         "hobbies":h})
 

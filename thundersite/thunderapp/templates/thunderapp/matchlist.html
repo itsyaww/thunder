@@ -2,6 +2,10 @@
 {% load staticfiles %}
 
 {% block content %}
+{% block info %}
+{% include "thunderapp/friends.html" %}
+{% endblock %}
+<div>
 <div id="profile" class="container-fluid w3-animate-left carousel-fade" >
     <section class="container">
         <div class="container-page">
@@ -29,7 +33,7 @@
     <div class="card-columns w3-animate-bottom" >
         {% for match in currentMember %}
             {% url 'friendprofile' as profile_url %}
-            <a href="{{ profile_url }}/profile/{{ match.pk }}">
+            <a onclick="friendInfo('{{match.id}}')">
             <div class="card" style="width: 18rem; height: 30%; border-color: #e1000e">
                 {% if match.profileImage %}
                 <img id='imagecard' class=" img-fluid card-img-top" style=" max-width: 18em; height: 80%;" alt="Not found" onerror="this.src='{{STATIC_URL}}/static/image-not-found.png'" height=150 src='{{ match.profileImage.url }}'>
@@ -80,5 +84,7 @@
         </div>
     </section>
 </div>
+</div>
+
 {% endblock %}
 
