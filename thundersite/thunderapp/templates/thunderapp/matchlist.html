@@ -30,7 +30,7 @@
     <section class="container">
         <div class="container-page">
             <div class='main-login main-centre'>
-    <div class="card-columns w3-animate-bottom" >
+    <div class="card-columns w3-animate-bottom mouse" >
         {% for match in currentMember %}
             {% url 'friendprofile' as profile_url %}
             <a onclick="friendInfo('{{match.id}}')">
@@ -75,6 +75,9 @@
             transform: translate(-50%, -50%);
             font-size: 25px;
             text-align: center;
+        }
+        .mouse {
+            cursor: pointer;
         }
 
 
